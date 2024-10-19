@@ -20,7 +20,7 @@ private:
     void Parse();
     void PrepareFunction();
 
-    static std::map<std::string
+    static std::map<std::string, std::function<double(double)>> FunctionBatchOne;
     int CursorPosition = 1; //default
     bool DisplayCursor = false;
     static std::map<int, std::string> ButtonClickInput;
