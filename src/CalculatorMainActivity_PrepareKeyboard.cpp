@@ -1,0 +1,87 @@
+#include <wx/wx.h>
+#include <wx/timer.h>
+#include "../scr/CalculatorMainActivity.hpp"
+#include <memory>
+void CalculatorMainActivity::PrepareKeyboard()
+{
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1000, "0", wxPoint(0, 570), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1001, "1", wxPoint(0, 530), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1002, "2", wxPoint(110, 530), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1003, "3", wxPoint(220, 530), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1004, "4", wxPoint(0, 490), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1005, "5", wxPoint(110, 490), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1006, "6", wxPoint(220, 490), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1007, "7", wxPoint(0, 450), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1008, "8", wxPoint(110, 450), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1009, "9", wxPoint(220, 450), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1010, ".", wxPoint(110, 570), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1011, "10^x", wxPoint(220, 570), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1012, "STO", wxPoint(0, 410), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1013, "VAR", wxPoint(110, 410), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1014, "S <-> D", wxPoint(220, 410), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1015, "(", wxPoint(0, 370), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1016, ")", wxPoint(110, 370), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1017, "dms", wxPoint(220, 370), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1018, "frac", wxPoint(0, 330), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1019, "sqrt", wxPoint(110, 330), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1020, "cubicroot", wxPoint(220, 330), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1021, "x^2", wxPoint(0, 290), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1022, "x^3", wxPoint(110, 290), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1023, "x^n", wxPoint(220, 290), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1024, "sin", wxPoint(0, 250), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1025, "cos", wxPoint(110, 250), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1026, "tan", wxPoint(220, 250), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1027, "opt", wxPoint(0, 210), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1028, "shift", wxPoint(110, 210), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1029, "alpha", wxPoint(220, 210), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1030, "cot", wxPoint(330, 250), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1031, "sec", wxPoint(440, 250), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1032, "csc", wxPoint(550, 250), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1033, "ln", wxPoint(330, 290), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1034, "log10", wxPoint(440, 290), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1035, "log", wxPoint(550, 290), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1036, "nthroot", wxPoint(330, 330), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1037, "x^-1", wxPoint(440, 330), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1038, "x!", wxPoint(550, 330), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1039, "sinh", wxPoint(330, 370), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1040, "cosh", wxPoint(440, 370), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1041, "tanh", wxPoint(550, 370), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1042, "coth", wxPoint(330, 410), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1043, "sech", wxPoint(440, 410), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1044, "csch", wxPoint(550, 410), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1045, "abs", wxPoint(330, 450), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1046, "round", wxPoint(440, 450), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1047, "floor", wxPoint(550, 450), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1048, "Up", wxPoint(440, 490), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1049, "Left", wxPoint(330, 530), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1050, "Right", wxPoint(550, 530), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1051, "Down", wxPoint(440, 570), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1052, ",", wxPoint(330, 490), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1053, "backspace", wxPoint(550, 490), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1054, "CALC", wxPoint(440, 530), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1055, "RandInt", wxPoint(330, 570), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1056, "Rand", wxPoint(550, 570), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1057, "+", wxPoint(660, 570), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1058, "-", wxPoint(770, 570), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1059, "*", wxPoint(660, 530), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1060, "/", wxPoint(770, 530), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1061, "e", wxPoint(330, 210), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1062, "e^x", wxPoint(440, 210), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1063, "pi", wxPoint(550, 210), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1064, "Si", wxPoint(660, 490), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1065, "Ci", wxPoint(770, 490), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1066, "Shi", wxPoint(660, 450), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1067, "Chi", wxPoint(770, 450), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1068, "Li", wxPoint(660, 410), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1069, "ProductLog", wxPoint(770, 410), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1070, "erf", wxPoint(660, 370), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1071, "erfc", wxPoint(770, 370), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1072, "erfi", wxPoint(660, 330), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1073, "gamma", wxPoint(770, 330), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1074, "zeta", wxPoint(660, 290), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1075, "EulerTotient", wxPoint(770, 290), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1076, "ProductLog(-1)", wxPoint(660, 250), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1077, "antiderivative", wxPoint(770, 250), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1078, "derivative", wxPoint(660, 210), wxSize(100, 30)));
+    FirstPageButton.push_back(std::make_shared<wxButton>(this, 1079, "MORE", wxPoint(770, 210), wxSize(100, 30)));
+}
