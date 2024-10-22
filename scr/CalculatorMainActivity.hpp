@@ -17,7 +17,7 @@ private:
     void HandleClick();
     void UpdateContent();
     void UpdateContentWithCursor();
-    void Parse();
+    double Calculate(int index = 1);
     void PrepareFunction();
 
     static std::map<std::string, std::function<double(double)>> FunctionBatchOne;
@@ -28,6 +28,7 @@ private:
     std::vector<std::shared_ptr<wxButton>> FirstPageButton;
     std::vector<std::shared_ptr<wxButton>> SecondPageButton;
     wxTextCtrl* m_textCtrl;
+    wxStaticText* result;
     wxButton* m_toggleButton; // Button for toggling
     wxTimer m_timer;
 

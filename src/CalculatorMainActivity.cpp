@@ -13,6 +13,7 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString& title)
     
     // Create the text box at (0,0) with size 880x200
     m_textCtrl = new wxTextCtrl(this, wxID_ANY, "", wxPoint(0, 0), wxSize(880, 200));
+    result = new wxStaticText(this, wxID_ANY, wxT(""), wxPoint(600, 180), wxSize(200, 100));
 
     // Create a toggle button below the text box
     //m_toggleButton = new wxButton(this, wxID_ANY, "Toggle Text Box", wxPoint(0, 210), wxSize(880, 30));
@@ -20,7 +21,7 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString& title)
     HandleClick();
     // Start the timer to update every second (1000 milliseconds)
     m_timer.Start(500); // 1000 ms
-
+    //m_textCtrl->Enable(false);
     // Set fixed size
     SetMinSize(wxSize(880, 600));
     SetMaxSize(wxSize(880, 600));
@@ -99,6 +100,7 @@ void CalculatorMainActivity::OnToggle(wxCommandEvent& event) {
             if(CursorPosition -1 < CurrentInput.size()) CursorPosition++;
         }else if(id_ == 1054)
         {
+            result->SetLabel(std::to_string(Calculate()));
             std::cout << "[ ";
             for(const auto& a: CurrentInput)
             {

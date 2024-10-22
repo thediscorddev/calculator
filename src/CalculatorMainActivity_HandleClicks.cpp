@@ -78,7 +78,7 @@ void CalculatorMainActivity::HandleClick()
     ButtonClickInput[1074] = "zeta("; 
     ButtonClickInput[1075] = "eulertotient("; 
     ButtonClickInput[1076] = "plogalter("; 
-    ButtonClickInput[1077] = "derivative("; 
-    ButtonClickInput[1078] = "antiderivative("; 
+    ButtonClickInput[1077] = "antiderivative("; 
+    ButtonClickInput[1078] = "derivative("; 
     ButtonClickInput[1079] = "SMORE"; 
 }
