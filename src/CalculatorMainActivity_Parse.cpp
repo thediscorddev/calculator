@@ -115,7 +115,8 @@ double CalculatorMainActivity::Calculate(int index)
                         resulta = fna+fnb;
                     }else if (a == "-") resulta = fna-fnb;
                     PlannedOperation.erase(PlannedOperation.begin() + ia -1,PlannedOperation.begin() + ia + 2);
-                    PlannedOperation.insert(PlannedOperation.begin() + ia - 1,std::to_string(resulta)); 
+                    PlannedOperation.insert(PlannedOperation.begin() + ia - 1,std::to_string(resulta));
+                    ia = 0;
                 }
                 catch(const std::exception& e)
                 {
