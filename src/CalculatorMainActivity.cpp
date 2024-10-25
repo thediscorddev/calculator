@@ -13,8 +13,8 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString& title)
     
     // Create the text box at (0,0) with size 880x200
     m_textCtrl = new wxTextCtrl(this, wxID_ANY, "", wxPoint(0, 0), wxSize(880, 200));
-    result = new wxStaticText(this, wxID_ANY, wxT(""), wxPoint(600, 180), wxSize(200, 100));
-    wxFont font(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    result = new wxStaticText(this, wxID_ANY, wxT(""), wxPoint(600, 150), wxSize(200, 100));
+    wxFont font(30, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
     // Set the font to the text control
     result->SetFont(font);
     m_textCtrl->SetFont(font);
