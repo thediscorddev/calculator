@@ -10,8 +10,11 @@ double CalculatorMainActivity::Calculate(int index)
     float CurrentNumPart = 0;
     int decimalNum = 0;
     int bracketLevel = 0;
-    int Eid = 0;
+    std::vector<int> FinishedId;
+    int Hid = 0;
+    int CurrentId = 0;
     std::map<std::string,std::vector<std::string>> ValueList; //important
+    std::map<std::string,std::string> Ftype; //important
     std::vector<std::string> PlannedOperation;
 
     for(int i = index-1; i < CurrentInput.size(); i++)
@@ -37,91 +40,130 @@ double CalculatorMainActivity::Calculate(int index)
             // Not a number, possibly "*", "-", "+", "\", "sin("
             if(a == ".") {
                 decimalNum = 1;
-            }
-            if(a == "+" || a == "-" || a == "*" || a == "/") {
+            } else if(a == "+" || a == "-" || a == "*" || a == "/") {
                 std::string o = a;
-                PlannedOperation.push_back(std::to_string(CurrentNumPart));
-                PlannedOperation.push_back(o);
+                if(CurrentId == 0) {
+                    if(CurrentNumPart != 0) PlannedOperation.push_back(std::to_string(CurrentNumPart));
+                    PlannedOperation.push_back(o);
+                }else {
+                    if(CurrentNumPart != 0) ValueList["__id_"+std::to_string(CurrentId)].push_back(std::to_string(CurrentNumPart));
+                    ValueList["__id_"+std::to_string(CurrentId)].push_back(o);
+                }
                 CurrentNumPart = 0;
                 decimalNum = 0;
+            }else if (a == "("|| a !=")")
+            {
+                std::vector<std::string> a_;
+                Hid++;
+                if(CurrentId==0) PlannedOperation.push_back("__id_"+std::to_string(Hid));
+                else ValueList["__id_"+std::to_string(CurrentId)].push_back("__id_"+std::to_string(Hid));
+                CurrentId=Hid;
+                ValueList["__id_"+std::to_string(CurrentId)] = a_;
+                if(a=="(") Ftype["__id_"+std::to_string(CurrentId)] = "normal";
+                else Ftype["__id_"+std::to_string(CurrentId)] = a;
+            }else if (a == ")")
+            {
+                if(CurrentNumPart!= 0)ValueList["__id_"+std::to_string(CurrentId)].push_back(std::to_string(CurrentNumPart));
+                CurrentNumPart = 0;
+                decimalNum = 0;
+                FinishedId.push_back(CurrentId);
+                bool conflict = true;
+                while(conflict)
+                {
+                    conflict=false;
+                    for(const auto& a: FinishedId)
+                    {
+                        if(a == CurrentId)
+                        {
+                            conflict=true;
+                            CurrentId--;
+                        }
+                    }
+                }
             }
         }
     }
-    PlannedOperation.push_back(std::to_string(CurrentNumPart));
+    if(CurrentId != 0)
+    {
+        //error
+    }
+    if(CurrentNumPart!= 0)PlannedOperation.push_back(std::to_string(CurrentNumPart));
     CurrentNumPart = 0;
     decimalNum = 0;
-    int ia = 0;
-    bool mdStillAvailable = true;
-    while(mdStillAvailable == true)
+    bool hasDoneDefiningValue = false;
+    while(hasDoneDefiningValue != true)
     {
-        mdStillAvailable = false;
-        if(ia >= PlannedOperation.size()) ia = 0;
-        const auto& a = PlannedOperation.at(ia);
-        if(a == "*" || a == "/")
+        hasDoneDefiningValue=true;
+        // This loop run unitl the value list is solved
+        for(int i = 1; i <= Hid; i++)
         {
-            if(ia -1 >= 0 && ia + 1 <= PlannedOperation.size())
-            {
-                try
+            if(ValueList["__id_"+std::to_string(i)].size()!=1) {
+                //Not fully resolved
+                bool FullyResolvedConstant=true;
+                for(int el_el = 0; el_el < ValueList["__id_"+std::to_string(i)].size(); el_el++)
                 {
-                    /* code */
-                    std::string na = PlannedOperation.at(ia-1);
-                    std::string nb = PlannedOperation.at(ia+1);
-                    float fna = std::stof(na);
-                    float fnb = std::stof(nb);
-                    float resulta = 0;
-                    if(a == "*")
+                    const auto& el__ = ValueList["__id_"+std::to_string(i)].at(el_el);
+                    try
                     {
-                        resulta = fna*fnb;
-                    }else if (a == "/" && fnb != 0) resulta = fna/fnb;
-                    else if (a == "/" && fnb == 0) resulta = 999999;
-                    PlannedOperation.erase(PlannedOperation.begin() + ia -1,PlannedOperation.begin() + ia + 2);
-                    PlannedOperation.insert(PlannedOperation.begin() + ia - 1,std::to_string(resulta));
-                    ia = 0;
+                        /* code */
+                        std::stod(el__); //check if it is a number
+                    }
+                    catch(const std::exception& e)
+                    {
+                        if(el__ != "+" && el__ != "-" && el__ != "*" && el__ != "/")
+                        {
+                            //ID or a function bracket
+                            hasDoneDefiningValue=false;
+                            if(ValueList[el__].size()!=1)
+                            {
+                                FullyResolvedConstant = false;
+                            }else {
+                                ValueList["__id_"+std::to_string(i)].at(el_el) = ValueList[el__].at(0);
+                            }
+
+                        }
+                    }
+
                 }
-                catch(const std::exception& e)
+                if(FullyResolvedConstant == true)
                 {
-                    std::cerr << e.what() << '\n';
+                    //Perhaps it is time to solve this:
+                    if(Ftype["__id_"+std::to_string(i)] == "normal") ValueList["__id_"+std::to_string(i)] = CalculateOperation(ValueList["__id_"+std::to_string(i)]);
+                    else {
+                        std::vector<std::string> Temp_Vec;
+                        Temp_Vec.push_back(std::to_string(FunctionBatchOne[Ftype["__id_"+std::to_string(i)]](std::stod(CalculateOperation(ValueList["__id_"+std::to_string(i)]).at(0)))));
+                        ValueList["__id_"+std::to_string(i)] = Temp_Vec;
+                    }
                 }
             }
         }
-        ia++;
-        for(const auto& a: PlannedOperation)
-        {
-            if(a == "*" || a == "/") mdStillAvailable = true;
-        }
     }
-    ia = 0;
-    while(PlannedOperation.size() > 1)
-    {
-        if(ia >= PlannedOperation.size()) ia = 0;
-        const auto& a = PlannedOperation.at(ia);
-        if(a == "+" || a == "-")
+        for(int el_el = 0; el_el < PlannedOperation.size(); el_el++)
         {
-            if(ia -1 >= 0 && ia + 1 <= PlannedOperation.size())
+            const auto& el__ = PlannedOperation.at(el_el);
+            try
             {
-                try
+                /* code */
+                std::stod(el__); //check if it is a number
+            }
+            catch(const std::exception& e)
+            {
+                if(el__ != "+" && el__ != "-" && el__ != "*" && el__ != "/")
                 {
-                    /* code */
-                    std::string na = PlannedOperation.at(ia-1);
-                    std::string nb = PlannedOperation.at(ia+1);
-                    float fna = std::stof(na);
-                    float fnb = std::stof(nb);
-                    float resulta = 0;
-                    if(a == "+")
-                    {
-                        resulta = fna+fnb;
-                    }else if (a == "-") resulta = fna-fnb;
-                    PlannedOperation.erase(PlannedOperation.begin() + ia -1,PlannedOperation.begin() + ia + 2);
-                    PlannedOperation.insert(PlannedOperation.begin() + ia - 1,std::to_string(resulta));
-                    ia = 0;
-                }
-                catch(const std::exception& e)
-                {
-                    std::cerr << e.what() << '\n';
+                    if(Ftype[el__] == "normal") PlannedOperation.at(el_el) = ValueList[el__].at(0);
+                    else {
+                        PlannedOperation.at(el_el) = std::to_string(FunctionBatchOne[Ftype[el__]](std::stod(ValueList[el__].at(0)))); 
+                    }
+                    //If I did everything correctly, then this one should only be replacing values
                 }
             }
+            
         }
-        ia++;
+    
+    std::vector<std::string> NewValues = CalculateOperation(PlannedOperation);
+    if(NewValues.size() != 1)
+    {
+        //Error
     }
-    return std::stod(PlannedOperation.at(0));
+    return std::stod(NewValues.at(0));
 }

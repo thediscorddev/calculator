@@ -20,6 +20,7 @@ private:
     void UpdateContentWithCursor();
     double Calculate(int index = 1);
     void PrepareFunction();
+    std::vector<std::string> CalculateOperation(std::vector<std::string> PlannedOperation_);
 
     static std::map<std::string, std::function<double(double)>> FunctionBatchOne;
     int CursorPosition = 1; //default

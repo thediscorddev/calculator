@@ -10,7 +10,7 @@ std::vector<std::string> CalculatorMainActivity::CurrentInput;
 CalculatorMainActivity::CalculatorMainActivity(const wxString& title) 
     : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(880, 600)), 
       m_timer(this) {
-    
+    PrepareFunction();
     // Create the text box at (0,0) with size 880x200
     m_textCtrl = new wxTextCtrl(this, wxID_ANY, "", wxPoint(0, 0), wxSize(880, 200));
     result = new wxStaticText(this, wxID_ANY, wxT(""), wxPoint(600, 150), wxSize(200, 100));
