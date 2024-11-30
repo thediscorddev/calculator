@@ -14,8 +14,10 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString& title)
     // Create the text box at (0,0) with size 880x200
     m_textCtrl = new wxTextCtrl(this, wxID_ANY, "", wxPoint(0, 0), wxSize(880, 200));
     result = new wxStaticText(this, wxID_ANY, wxT(""), wxPoint(600, 150), wxSize(200, 100));
-    wxFont font(30, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL);
+    wxFont font(30, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, "Courier New");
     // Set the font to the text control
+    m_textCtrl->SetBackgroundColour(wxColour(196, 196, 196));  // Light gray background (or any color)
+    m_textCtrl->SetForegroundColour(wxColour(0, 0, 0));  // Dark gray text (or any color)
     result->SetFont(font);
     m_textCtrl->SetFont(font);
     // Create a toggle button below the text box
@@ -24,7 +26,7 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString& title)
     HandleClick();
     // Start the timer to update every second (1000 milliseconds)
     m_timer.Start(500); // 1000 ms
-    //m_textCtrl->Enable(false);
+    m_textCtrl->Enable(false);
     // Set fixed size
     SetMinSize(wxSize(880, 600));
     SetMaxSize(wxSize(880, 600));

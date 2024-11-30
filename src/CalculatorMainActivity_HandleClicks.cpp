@@ -35,7 +35,7 @@ void CalculatorMainActivity::HandleClick()
     ButtonClickInput[1031] = "sec("; 
     ButtonClickInput[1032] = "csc("; 
     ButtonClickInput[1033] = "ln("; 
-    ButtonClickInput[1034] = "log(10,"; 
+    ButtonClickInput[1034] = "log10("; 
     ButtonClickInput[1035] = "log("; 
     ButtonClickInput[1036] = "nroot("; 
     ButtonClickInput[1037] = "ifrac("; 
