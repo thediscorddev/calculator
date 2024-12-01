@@ -12,8 +12,8 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString& title)
       m_timer(this) {
     PrepareFunction();
     // Create the text box at (0,0) with size 880x200
-    m_textCtrl = new wxTextCtrl(this, wxID_ANY, "", wxPoint(0, 0), wxSize(880, 200));
-    result = new wxStaticText(this, wxID_ANY, wxT(""), wxPoint(600, 150), wxSize(200, 100));
+    m_textCtrl = new wxTextCtrl(this, wxID_ANY, "", wxPoint(0, 0), wxSize(800, 200));
+    result = new wxStaticText(this, wxID_ANY, wxT(""), wxPoint(500, 150), wxSize(200, 100));
     wxFont font(30, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, "Courier New");
     // Set the font to the text control
     m_textCtrl->SetBackgroundColour(wxColour(196, 196, 196));  // Light gray background (or any color)
@@ -28,8 +28,8 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString& title)
     m_timer.Start(500); // 1000 ms
     m_textCtrl->Enable(false);
     // Set fixed size
-    SetMinSize(wxSize(880, 600));
-    SetMaxSize(wxSize(880, 600));
+    SetMinSize(wxSize(800, 510));
+    SetMaxSize(wxSize(800, 510));
 }
 
 void CalculatorMainActivity::UpdateContent()
@@ -105,15 +105,12 @@ void CalculatorMainActivity::OnToggle(wxCommandEvent& event) {
             if(CursorPosition -1 < CurrentInput.size()) CursorPosition++;
         }else if(id_ == 1054)
         {
-            result->SetLabel(std::to_string(Calculate()));
-            std::cout << "[ ";
-            for(const auto& a: CurrentInput)
+            try {
+                result->SetLabel(std::to_string(Calculate()));
+            }catch(std::exception& e)
             {
-                std::cout << "\"";
-                std::cout << a;
-                std::cout << "\",   ";
+                result->SetLabel(e.what());
             }
-            std::cout << "]" << std::endl;
         }
     }
 }

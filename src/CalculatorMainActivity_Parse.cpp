@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <stdexcept>
 double CalculatorMainActivity::Calculate(int index)
 {
     //Parser
@@ -14,6 +15,7 @@ double CalculatorMainActivity::Calculate(int index)
     int Hid = 0;
     int CurrentId = 0;
     std::map<std::string,std::vector<std::string>> ValueList; //important
+    std::map<std::string, bool> CalculatedValueList; // important
     std::map<std::string,std::string> Ftype; //important
     std::vector<std::string> PlannedOperation;
 
@@ -22,8 +24,6 @@ double CalculatorMainActivity::Calculate(int index)
         const auto& a = CurrentInput.at(i);
         try
         {
-            std::cout << a << std::endl;
-            std::cout << i << std::endl;
             if(decimalNum == 0) CurrentNumPart=CurrentNumPart*10+std::stoi(a);
             else {
                 int m = 1;
@@ -53,6 +53,7 @@ double CalculatorMainActivity::Calculate(int index)
                 decimalNum = 0;
             }else if (a == "("|| a !=")")
             {
+                //KEEP AN EYE
                 std::vector<std::string> a_;
                 Hid++;
                 if(CurrentId==0) PlannedOperation.push_back("__id_"+std::to_string(Hid));
@@ -86,6 +87,7 @@ double CalculatorMainActivity::Calculate(int index)
     if(CurrentId != 0)
     {
         //error
+        throw std::runtime_error("Syntax Error");
     }
     if(CurrentNumPart!= 0)PlannedOperation.push_back(std::to_string(CurrentNumPart));
     CurrentNumPart = 0;
@@ -97,7 +99,7 @@ double CalculatorMainActivity::Calculate(int index)
         // This loop run unitl the value list is solved
         for(int i = 1; i <= Hid; i++)
         {
-            if(ValueList["__id_"+std::to_string(i)].size()!=1) {
+            if(CalculatedValueList.find("__id_"+std::to_string(i)) == CalculatedValueList.end()) {
                 //Not fully resolved
                 bool FullyResolvedConstant=true;
                 for(int el_el = 0; el_el < ValueList["__id_"+std::to_string(i)].size(); el_el++)
@@ -114,7 +116,7 @@ double CalculatorMainActivity::Calculate(int index)
                         {
                             //ID or a function bracket
                             hasDoneDefiningValue=false;
-                            if(ValueList[el__].size()!=1)
+                            if(CalculatedValueList.find(el__) == CalculatedValueList.end())
                             {
                                 FullyResolvedConstant = false;
                             }else {
@@ -127,12 +129,23 @@ double CalculatorMainActivity::Calculate(int index)
                 }
                 if(FullyResolvedConstant == true)
                 {
+                    CalculatedValueList["__id_"+std::to_string(i)] = true;
                     //Perhaps it is time to solve this:
                     if(Ftype["__id_"+std::to_string(i)] == "normal") ValueList["__id_"+std::to_string(i)] = CalculateOperation(ValueList["__id_"+std::to_string(i)]);
                     else {
                         std::vector<std::string> Temp_Vec;
-                        Temp_Vec.push_back(std::to_string(FunctionBatchOne[Ftype["__id_"+std::to_string(i)]](std::stod(CalculateOperation(ValueList["__id_"+std::to_string(i)]).at(0)))));
-                        ValueList["__id_"+std::to_string(i)] = Temp_Vec;
+                        try {
+                            /*std::string st_d = ValueList[el__].at(0);
+                            while(ValueList.find(st_d) != ValueList.end()) {
+                                st_d = ValueList[st_d].at(0);
+                            }*/
+                            Temp_Vec.push_back(std::to_string(FunctionBatchOne[Ftype["__id_"+std::to_string(i)]](std::stod(CalculateOperation(ValueList["__id_"+std::to_string(i)]).at(0)))));
+                            ValueList["__id_"+std::to_string(i)] = Temp_Vec;
+                        }catch(std::exception& e)
+                        {
+                            std::cout << e.what() << std::endl;
+                            throw std::runtime_error(e.what());
+                        }
                     }
                 }
             }
@@ -150,10 +163,27 @@ double CalculatorMainActivity::Calculate(int index)
             {
                 if(el__ != "+" && el__ != "-" && el__ != "*" && el__ != "/")
                 {
-                    if(Ftype[el__] == "normal") PlannedOperation.at(el_el) = ValueList[el__].at(0);
-                    else {
-                        PlannedOperation.at(el_el) = std::to_string(FunctionBatchOne[Ftype[el__]](std::stod(ValueList[el__].at(0)))); 
+                    std::string st_d = ValueList[el__].at(0);
+                    while(ValueList.find(st_d) != ValueList.end()) {
+                        st_d = ValueList[st_d].at(0);
+                        
                     }
+                    //if(Ftype[el__] == "normal") 
+                    PlannedOperation.at(el_el) = st_d;
+                   /* else {
+                        try
+                        {
+                            std::cout << st_d << std::endl;
+                            //std::cout << ValueList[el__].at(0) <<std::endl << FunctionBatchOne[Ftype[el__]](std::stod(ValueList[el__].at(0))) << std::endl;
+                            PlannedOperation.at(el_el) = std::to_string(FunctionBatchOne[Ftype[el__]](std::stod(st_d))); 
+                        }
+                        catch(std::exception& e)
+                        {
+                            std::cout << e.what() << std::endl;
+                            throw std::runtime_error(e.what());
+                        }
+                        
+                    }*/
                     //If I did everything correctly, then this one should only be replacing values
                 }
             }
