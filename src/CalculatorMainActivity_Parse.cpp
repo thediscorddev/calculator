@@ -43,28 +43,44 @@ double CalculatorMainActivity::Calculate(int index)
             } else if(a == "+" || a == "-" || a == "*" || a == "/") {
                 std::string o = a;
                 if(CurrentId == 0) {
-                    if(CurrentNumPart != 0) PlannedOperation.push_back(std::to_string(CurrentNumPart));
+                    if(CurrentNumPart != 0) PlannedOperation.push_back(ToStringWithPrecision(CurrentNumPart));
                     PlannedOperation.push_back(o);
                 }else {
-                    if(CurrentNumPart != 0) ValueList["__id_"+std::to_string(CurrentId)].push_back(std::to_string(CurrentNumPart));
-                    ValueList["__id_"+std::to_string(CurrentId)].push_back(o);
+                    if(CurrentNumPart != 0) ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back(ToStringWithPrecision(CurrentNumPart));
+                    ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back(o);
                 }
                 CurrentNumPart = 0;
                 decimalNum = 0;
+            }else if (constantList.find(a) != constantList.end())
+            {
+                if(CurrentId == 0) {
+                    if (CurrentNumPart!= 0) {
+                        PlannedOperation.push_back(ToStringWithPrecision(CurrentNumPart));
+                        PlannedOperation.push_back("*");
+                    }
+                    PlannedOperation.push_back(ToStringWithPrecision(constantList[a]));
+                }else {
+                    if(CurrentNumPart != 0)
+                    {
+                        ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back(ToStringWithPrecision(CurrentNumPart));
+                        ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back("*");
+                    }
+                    ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back(ToStringWithPrecision(constantList[a]));
+                }
             }else if (a == "("|| a !=")")
             {
                 //KEEP AN EYE
                 std::vector<std::string> a_;
                 Hid++;
-                if(CurrentId==0) PlannedOperation.push_back("__id_"+std::to_string(Hid));
-                else ValueList["__id_"+std::to_string(CurrentId)].push_back("__id_"+std::to_string(Hid));
+                if(CurrentId==0) PlannedOperation.push_back("__id_"+ToStringWithPrecision(Hid));
+                else ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back("__id_"+ToStringWithPrecision(Hid));
                 CurrentId=Hid;
-                ValueList["__id_"+std::to_string(CurrentId)] = a_;
-                if(a=="(") Ftype["__id_"+std::to_string(CurrentId)] = "normal";
-                else Ftype["__id_"+std::to_string(CurrentId)] = a;
+                ValueList["__id_"+ToStringWithPrecision(CurrentId)] = a_;
+                if(a=="(") Ftype["__id_"+ToStringWithPrecision(CurrentId)] = "normal";
+                else Ftype["__id_"+ToStringWithPrecision(CurrentId)] = a;
             }else if (a == ")")
             {
-                if(CurrentNumPart!= 0)ValueList["__id_"+std::to_string(CurrentId)].push_back(std::to_string(CurrentNumPart));
+                if(CurrentNumPart!= 0)ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back(ToStringWithPrecision(CurrentNumPart));
                 CurrentNumPart = 0;
                 decimalNum = 0;
                 FinishedId.push_back(CurrentId);
@@ -89,7 +105,7 @@ double CalculatorMainActivity::Calculate(int index)
         //error
         throw std::runtime_error("Syntax Error");
     }
-    if(CurrentNumPart!= 0)PlannedOperation.push_back(std::to_string(CurrentNumPart));
+    if(CurrentNumPart!= 0)PlannedOperation.push_back(ToStringWithPrecision(CurrentNumPart));
     CurrentNumPart = 0;
     decimalNum = 0;
     bool hasDoneDefiningValue = false;
@@ -99,12 +115,12 @@ double CalculatorMainActivity::Calculate(int index)
         // This loop run unitl the value list is solved
         for(int i = 1; i <= Hid; i++)
         {
-            if(CalculatedValueList.find("__id_"+std::to_string(i)) == CalculatedValueList.end()) {
+            if(CalculatedValueList.find("__id_"+ToStringWithPrecision(i)) == CalculatedValueList.end()) {
                 //Not fully resolved
                 bool FullyResolvedConstant=true;
-                for(int el_el = 0; el_el < ValueList["__id_"+std::to_string(i)].size(); el_el++)
+                for(int el_el = 0; el_el < ValueList["__id_"+ToStringWithPrecision(i)].size(); el_el++)
                 {
-                    const auto& el__ = ValueList["__id_"+std::to_string(i)].at(el_el);
+                    const auto& el__ = ValueList["__id_"+ToStringWithPrecision(i)].at(el_el);
                     try
                     {
                         /* code */
@@ -120,7 +136,7 @@ double CalculatorMainActivity::Calculate(int index)
                             {
                                 FullyResolvedConstant = false;
                             }else {
-                                ValueList["__id_"+std::to_string(i)].at(el_el) = ValueList[el__].at(0);
+                                ValueList["__id_"+ToStringWithPrecision(i)].at(el_el) = ValueList[el__].at(0);
                             }
 
                         }
@@ -129,9 +145,9 @@ double CalculatorMainActivity::Calculate(int index)
                 }
                 if(FullyResolvedConstant == true)
                 {
-                    CalculatedValueList["__id_"+std::to_string(i)] = true;
+                    CalculatedValueList["__id_"+ToStringWithPrecision(i)] = true;
                     //Perhaps it is time to solve this:
-                    if(Ftype["__id_"+std::to_string(i)] == "normal") ValueList["__id_"+std::to_string(i)] = CalculateOperation(ValueList["__id_"+std::to_string(i)]);
+                    if(Ftype["__id_"+ToStringWithPrecision(i)] == "normal") ValueList["__id_"+ToStringWithPrecision(i)] = CalculateOperation(ValueList["__id_"+ToStringWithPrecision(i)]);
                     else {
                         std::vector<std::string> Temp_Vec;
                         try {
@@ -139,8 +155,8 @@ double CalculatorMainActivity::Calculate(int index)
                             while(ValueList.find(st_d) != ValueList.end()) {
                                 st_d = ValueList[st_d].at(0);
                             }*/
-                            Temp_Vec.push_back(std::to_string(FunctionBatchOne[Ftype["__id_"+std::to_string(i)]](std::stod(CalculateOperation(ValueList["__id_"+std::to_string(i)]).at(0)))));
-                            ValueList["__id_"+std::to_string(i)] = Temp_Vec;
+                            Temp_Vec.push_back(ToStringWithPrecision(FunctionBatchOne[Ftype["__id_"+ToStringWithPrecision(i)]](std::stod(CalculateOperation(ValueList["__id_"+ToStringWithPrecision(i)]).at(0)))));
+                            ValueList["__id_"+ToStringWithPrecision(i)] = Temp_Vec;
                         }catch(std::exception& e)
                         {
                             std::cout << e.what() << std::endl;
@@ -175,7 +191,7 @@ double CalculatorMainActivity::Calculate(int index)
                         {
                             std::cout << st_d << std::endl;
                             //std::cout << ValueList[el__].at(0) <<std::endl << FunctionBatchOne[Ftype[el__]](std::stod(ValueList[el__].at(0))) << std::endl;
-                            PlannedOperation.at(el_el) = std::to_string(FunctionBatchOne[Ftype[el__]](std::stod(st_d))); 
+                            PlannedOperation.at(el_el) = ToStringWithPrecision(FunctionBatchOne[Ftype[el__]](std::stod(st_d))); 
                         }
                         catch(std::exception& e)
                         {

@@ -9,8 +9,8 @@ GreenButton::GreenButton(wxWindow* parent, wxWindowID id, const wxString& label,
     : wxButton(parent, id, label, p, s)
 {
     SetFont(wxFont(10, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
-    startColor = wxColour(0, 191, 255); // Initial color
-    hoverColor = wxColour(64, 224, 208); // Hover color (you can change it)
+    startColor = wxColour(0, 128, 0); // Initial color
+    hoverColor = wxColour(0, 110, 0); // Hover color (you can change it)
     SetBackgroundColour(startColor);
     SetForegroundColour(wxColour(255, 255, 255));
 

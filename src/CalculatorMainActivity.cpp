@@ -36,27 +36,52 @@ void CalculatorMainActivity::UpdateContent()
 {
     if(DisplayCursor == true) UpdateContentWithCursor();
     else {
+        int Pos = 0;
+        int i = 0;
         std::string CurrentDisplayedText = "";
         for(const auto& a: CurrentInput)
         {
+            if(i <= CursorPosition) {
+                Pos+=a.length();
+                i++;
+            }
             CurrentDisplayedText+=a;
         }
-        m_textCtrl->SetValue(CurrentDisplayedText);
+        m_textCtrl->SetValue(GetDisplayString(CurrentDisplayedText,Pos));
     }
 }
 void CalculatorMainActivity::UpdateContentWithCursor()
 {
-    int i = 1;
+    const int maxCharLimit = 20;
+    int curPos = 0;
+    int i = 0;
+    bool hasReachPos = false;
     std::string CurrentDisplayedText = "";
+
     for(const auto& a: CurrentInput)
     {
-        if(i == CursorPosition && DisplayCursor == true) CurrentDisplayedText+="#";
-        CurrentDisplayedText+=a;
+        // Insert cursor before adding the current string
+        if(i == CursorPosition && DisplayCursor) 
+        {
+            CurrentDisplayedText += "#";
+            hasReachPos = true;
+        }
+
+        if(!hasReachPos) curPos += a.length();
+        
+        CurrentDisplayedText += a;
         i++;
     }
-    if(CurrentInput.size() == CursorPosition-1 && DisplayCursor == true) CurrentDisplayedText += "#";
-    m_textCtrl->SetValue(CurrentDisplayedText);
+
+    // Edge case: If the cursor is at the end, append it at the end
+    if(CursorPosition == CurrentInput.size() && DisplayCursor)
+    {
+        CurrentDisplayedText += "#";
+    }
+
+    m_textCtrl->SetValue(GetDisplayString(CurrentDisplayedText, curPos));
 }
+
 void CalculatorMainActivity::OnTimer(wxTimerEvent& event) {
     DisplayCursor=(!DisplayCursor);
     UpdateContentWithCursor();

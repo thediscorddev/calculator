@@ -28,7 +28,7 @@ std::vector<std::string> CalculatorMainActivity::CalculateOperation(std::vector<
                     }else if (a == "/" && fnb != 0) resulta = fna/fnb;
                     else if (a == "/" && fnb == 0) resulta = 999999;
                     PlannedOperation_.erase(PlannedOperation_.begin() + ia -1,PlannedOperation_.begin() + ia + 2);
-                    PlannedOperation_.insert(PlannedOperation_.begin() + ia - 1,std::to_string(resulta));
+                    PlannedOperation_.insert(PlannedOperation_.begin() + ia - 1,ToStringWithPrecision(resulta));
                     ia = 0;
                 }
                 catch(const std::exception& e)
@@ -65,7 +65,7 @@ std::vector<std::string> CalculatorMainActivity::CalculateOperation(std::vector<
                         resulta = fna+fnb;
                     }else if (a == "-") resulta = fna-fnb;
                     PlannedOperation_.erase(PlannedOperation_.begin() + ia -1,PlannedOperation_.begin() + ia + 2);
-                    PlannedOperation_.insert(PlannedOperation_.begin() + ia - 1,std::to_string(resulta));
+                    PlannedOperation_.insert(PlannedOperation_.begin() + ia - 1,ToStringWithPrecision(resulta));
                     ia = 0;
                 }
                 catch(const std::exception& e)

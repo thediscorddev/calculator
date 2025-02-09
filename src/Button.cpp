@@ -10,8 +10,8 @@ Button::Button(wxWindow* parent, wxWindowID id, const wxString& label, wxPoint p
     : wxButton(parent, id, label, p, s)
 {
     SetFont(wxFont(10, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
-    startColor = wxColour(138, 43, 226); // Initial color
-    hoverColor = wxColour(185, 85, 211); // Hover color (you can change it)
+    startColor = wxColour(0, 0, 128); // Initial color
+    hoverColor = wxColour(0, 0, 110); // Hover color (you can change it)
     SetBackgroundColour(startColor);
     SetForegroundColour(wxColour(255, 255, 255));
 

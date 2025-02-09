@@ -8,9 +8,9 @@ wxEND_EVENT_TABLE()
 OperationButton::OperationButton(wxWindow* parent, wxWindowID id, const wxString& label, wxPoint p, wxSize s)
     : wxButton(parent, id, label, p, s)
 {
-    SetFont(wxFont(10, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
-    startColor = wxColour(30, 58, 138); // Initial color
-    hoverColor = wxColour(70, 100, 180); // Hover color (you can change it)
+    SetFont(wxFont(20, wxFONTFAMILY_SWISS, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    startColor = wxColour(128, 128, 128); // Initial color
+    hoverColor = wxColour(105, 105, 105); // Hover color (you can change it)
     SetBackgroundColour(startColor);
     SetForegroundColour(wxColour(255, 255, 255));
 

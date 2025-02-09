@@ -20,6 +20,8 @@ private:
     void UpdateContentWithCursor();
     double Calculate(int index = 1);
     void PrepareFunction();
+    std::string GetDisplayString(std::string CurrentString, int pos);
+    std::string ToStringWithPrecision(double value, int precision = 16);
     std::vector<std::string> CalculateOperation(std::vector<std::string> PlannedOperation_);
     static std::map<std::string,double > constantList;
     static std::map<std::string, std::function<double(double)>> FunctionBatchOne;
