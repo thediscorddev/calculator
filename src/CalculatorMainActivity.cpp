@@ -1,36 +1,49 @@
 #include <wx/wx.h>
 #include <wx/timer.h>
 #include "../scr/CalculatorMainActivity.hpp"
+#include "../scr/CustomTextCtrl.hpp"
 #include <map>
 #include <vector>
 #include <string>
 #include <iostream>
 std::map<int, std::string> CalculatorMainActivity::ButtonClickInput;
 std::vector<std::string> CalculatorMainActivity::CurrentInput;
-CalculatorMainActivity::CalculatorMainActivity(const wxString& title) 
-    : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(880, 600)), 
-      m_timer(this) {
-    PrepareFunction();
-    // Create the text box at (0,0) with size 880x200
-    m_textCtrl = new wxTextCtrl(this, wxID_ANY, "", wxPoint(0, 0), wxSize(800, 200));
-    result = new wxStaticText(this, wxID_ANY, wxT(""), wxPoint(500, 150), wxSize(200, 100));
-    wxFont font(30, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, "Courier New");
-    // Set the font to the text control
-    m_textCtrl->SetBackgroundColour(wxColour(196, 196, 196));  // Light gray background (or any color)
-    m_textCtrl->SetForegroundColour(wxColour(0, 0, 0));  // Dark gray text (or any color)
-    result->SetFont(font);
-    m_textCtrl->SetFont(font);
-    // Create a toggle button below the text box
-    //m_toggleButton = new wxButton(this, wxID_ANY, "Toggle Text Box", wxPoint(0, 210), wxSize(880, 30));
-    PrepareKeyboard();
-    HandleClick();
-    // Start the timer to update every second (1000 milliseconds)
-    m_timer.Start(500); // 1000 ms
-    m_textCtrl->Enable(false);
-    // Set fixed size
-    SetMinSize(wxSize(800, 510));
-    SetMaxSize(wxSize(800, 510));
-}
+    
+    // Then in your constructor:
+    CalculatorMainActivity::CalculatorMainActivity(const wxString& title) 
+        : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(880, 600)), 
+          m_timer(this) {
+    
+        // Ensure client size is exact
+        SetClientSize(wxSize(800, 510));
+        SetMinClientSize(wxSize(800, 510));
+        SetMaxClientSize(wxSize(800, 510));
+    
+        PrepareFunction();
+    
+        // Create the text box at (0,0) with size 800x200
+        m_textCtrl = new CustomTextCtrl(this, wxID_ANY, wxPoint(0, 0), wxSize(800, 200));
+        //result = new TransparentStaticText(this, wxID_ANY, wxT(""), wxPoint(500, 210), wxSize(200, 100)); //
+        ((CustomTextCtrl*)m_textCtrl)->SetOverlayText("");
+    
+        wxFont font(30, wxFONTFAMILY_TELETYPE, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, "Courier New");
+    
+        // Set fonts and colors
+        m_textCtrl->SetBackgroundColour(wxColour(196, 196, 196));  // Light gray background
+        m_textCtrl->SetForegroundColour(wxColour(0, 0, 0));  // Black text
+        m_textCtrl->SetFont(font);
+    
+        //result->SetFont(font);
+        //result->SetForegroundColour(wxColour(0, 0, 0)); // Black text
+    
+        // Other init
+        PrepareKeyboard();
+        HandleClick();
+        m_timer.Start(500); // Start timer
+    
+        m_textCtrl->Enable(false);
+    }
+    
 
 void CalculatorMainActivity::UpdateContent()
 {
@@ -47,7 +60,8 @@ void CalculatorMainActivity::UpdateContent()
             }
             CurrentDisplayedText+=a;
         }
-        m_textCtrl->SetValue(GetDisplayString(CurrentDisplayedText,Pos));
+        ((CustomTextCtrl*)m_textCtrl)->SetSecondOverlayText(GetDisplayString(CurrentDisplayedText,Pos));
+        ((CustomTextCtrl*)m_textCtrl)->SetOverlayText("");
     }
 }
 void CalculatorMainActivity::UpdateContentWithCursor()
@@ -79,7 +93,7 @@ void CalculatorMainActivity::UpdateContentWithCursor()
         CurrentDisplayedText += "#";
     }
 
-    m_textCtrl->SetValue(GetDisplayString(CurrentDisplayedText, curPos));
+    ((CustomTextCtrl*)m_textCtrl)->SetSecondOverlayText(GetDisplayString(CurrentDisplayedText, curPos));
 }
 
 void CalculatorMainActivity::OnTimer(wxTimerEvent& event) {
@@ -89,7 +103,7 @@ void CalculatorMainActivity::OnTimer(wxTimerEvent& event) {
 
 void CalculatorMainActivity::UpdateTime() {
     wxDateTime now = wxDateTime::Now();
-    //m_textCtrl->SetValue(now.Format("%H:%M:%S")); // Update the text box with the current time
+    //m_textCtrl->SetSecondOverlayText(now.Format("%H:%M:%S")); // Update the text box with the current time
 }
 
 void CalculatorMainActivity::OnToggle(wxCommandEvent& event) {
@@ -131,10 +145,15 @@ void CalculatorMainActivity::OnToggle(wxCommandEvent& event) {
         }else if(id_ == 1054)
         {
             try {
-                result->SetLabel(std::to_string(Calculate()));
+                //result->SetLabel(std::to_string(Calculate()));
+                double result = Calculate(); // Assuming Calculate returns double
+
+                // Option 1: wxString::Format (recommended)
+                ((CustomTextCtrl*)m_textCtrl)->SetOverlayText(wxString::Format("%.10g", result)); // Format as string
             }catch(std::exception& e)
             {
-                result->SetLabel(e.what());
+                //result->SetLabel(e.what());
+                ((CustomTextCtrl*)m_textCtrl)->SetOverlayText(e.what());
             }
         }
     }
