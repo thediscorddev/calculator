@@ -1,7 +1,7 @@
 #include "../scr/CalculatorMainActivity.hpp"
 #include <string>
 std::string CalculatorMainActivity::GetDisplayString(std::string CurrentString, int pos) {
-    const int MaxLength = 20;
+    const int MaxLength = 28;
     const int StrLength = CurrentString.length();
     if (StrLength == 0) return CurrentString;
 

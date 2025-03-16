@@ -66,34 +66,8 @@ void CalculatorMainActivity::UpdateContent()
 }
 void CalculatorMainActivity::UpdateContentWithCursor()
 {
-    const int maxCharLimit = 20;
-    int curPos = 0;
-    int i = 0;
-    bool hasReachPos = false;
-    std::string CurrentDisplayedText = "";
-
-    for(const auto& a: CurrentInput)
-    {
-        // Insert cursor before adding the current string
-        if(i == CursorPosition && DisplayCursor) 
-        {
-            CurrentDisplayedText += "#";
-            hasReachPos = true;
-        }
-
-        if(!hasReachPos) curPos += a.length();
-        
-        CurrentDisplayedText += a;
-        i++;
-    }
-
-    // Edge case: If the cursor is at the end, append it at the end
-    if(CursorPosition == CurrentInput.size() && DisplayCursor)
-    {
-        CurrentDisplayedText += "#";
-    }
-
-    ((CustomTextCtrl*)m_textCtrl)->SetSecondOverlayText(GetDisplayString(CurrentDisplayedText, curPos));
+    DisplayCursor=(DisplayCursor!=false);
+    ((CustomTextCtrl*)m_textCtrl)->DisplayCursor(DisplayCursor,CursorPosition,CurrentInput);
 }
 
 void CalculatorMainActivity::OnTimer(wxTimerEvent& event) {

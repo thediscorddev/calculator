@@ -25,5 +25,36 @@ void CustomTextCtrl::OnPaint(wxPaintEvent& event) {
             // Draw overlay text on top (adjust position as needed)
     dc.DrawText(m_overlayText, 500 - GetPosition().x, 150 - GetPosition().y);
     dc.DrawText(m_secondOverlay, 10, 30);
+    if( m_cursor != "")
+    {
+        int width = 0, height = 0;
+        dc.GetTextExtent(m_secondOverlay.SubString(0, CursorXLen-std::max(CursorXLen - 28, 0)), &width, &height);
+        dc.DrawText(m_cursor, width-10, 35);
+    }
 }
     
+void CustomTextCtrl::DisplayCursor(bool cursorStatus, int cursorPos, std::vector<std::string> & CurrentTextInput)
+{
+    if(cursorStatus == false)
+    {
+        m_cursor = "";
+        Refresh();
+    }else {
+        CursorXLen = 0;
+
+        int i = 0;
+        for(const auto& el: CurrentTextInput)
+        {
+            if(i == cursorPos)
+            {
+                break;
+            }
+            CursorXLen += sizeof(el);
+            i++;
+        }
+        //How do I calculate position 
+        m_cursor = "_";
+        Refresh();
+    }
+
+}
