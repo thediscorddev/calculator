@@ -8,6 +8,7 @@ class CustomTextCtrl : public wxTextCtrl {
     
         void SetOverlayText(const wxString& text);
         void SetSecondOverlayText(const wxString& text);
+        void Refreshs();
         void DisplayCursor(bool cursorStatus, int cursorPos, std::vector<std::string> & CurrentTextInput);
     
     private:

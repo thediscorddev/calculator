@@ -9,6 +9,8 @@
 class CalculatorMainActivity : public wxFrame {
 public:
     CalculatorMainActivity(const wxString& title);
+    static std::vector<std::string> CurrentInput;
+    static     int CursorPosition; //default
 
 private:
     void OnTimer(wxTimerEvent& event);
@@ -25,10 +27,8 @@ private:
     std::vector<std::string> CalculateOperation(std::vector<std::string> PlannedOperation_);
     static std::map<std::string,double > constantList;
     static std::map<std::string, std::function<double(double)>> FunctionBatchOne;
-    int CursorPosition = 1; //default
     bool DisplayCursor = false;
     static std::map<int, std::string> ButtonClickInput;
-    static std::vector<std::string> CurrentInput;
     std::vector<std::shared_ptr<wxButton>> FirstPageButton;
     std::vector<std::shared_ptr<wxButton>> SecondPageButton;
     wxTextCtrl* m_textCtrl;

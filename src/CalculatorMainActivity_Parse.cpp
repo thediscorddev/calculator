@@ -9,6 +9,7 @@ double CalculatorMainActivity::Calculate(int index)
 {
     //Parser
     float CurrentNumPart = 0;
+    bool HasPush = false;
     int decimalNum = 0;
     int bracketLevel = 0;
     std::vector<int> FinishedId;
@@ -34,6 +35,7 @@ double CalculatorMainActivity::Calculate(int index)
                 CurrentNumPart+=(float) std::stoi(a)/m;
                 decimalNum++;
             }
+            HasPush=true;
         }
         catch(const std::exception& e)
         {
@@ -43,24 +45,25 @@ double CalculatorMainActivity::Calculate(int index)
             } else if(a == "+" || a == "-" || a == "*" || a == "/") {
                 std::string o = a;
                 if(CurrentId == 0) {
-                    if(CurrentNumPart != 0) PlannedOperation.push_back(ToStringWithPrecision(CurrentNumPart));
+                    if(HasPush == true) PlannedOperation.push_back(ToStringWithPrecision(CurrentNumPart));
                     PlannedOperation.push_back(o);
                 }else {
-                    if(CurrentNumPart != 0) ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back(ToStringWithPrecision(CurrentNumPart));
+                    if(HasPush == true) ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back(ToStringWithPrecision(CurrentNumPart));
                     ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back(o);
                 }
                 CurrentNumPart = 0;
+                HasPush=false;
                 decimalNum = 0;
             }else if (constantList.find(a) != constantList.end())
             {
                 if(CurrentId == 0) {
-                    if (CurrentNumPart!= 0) {
+                    if (HasPush == true) {
                         PlannedOperation.push_back(ToStringWithPrecision(CurrentNumPart));
                         PlannedOperation.push_back("*");
                     }
                     PlannedOperation.push_back(ToStringWithPrecision(constantList[a]));
                 }else {
-                    if(CurrentNumPart != 0)
+                    if(HasPush == true)
                     {
                         ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back(ToStringWithPrecision(CurrentNumPart));
                         ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back("*");
@@ -80,8 +83,9 @@ double CalculatorMainActivity::Calculate(int index)
                 else Ftype["__id_"+ToStringWithPrecision(CurrentId)] = a;
             }else if (a == ")")
             {
-                if(CurrentNumPart!= 0)ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back(ToStringWithPrecision(CurrentNumPart));
+                if(HasPush== true)ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back(ToStringWithPrecision(CurrentNumPart));
                 CurrentNumPart = 0;
+                HasPush=false;
                 decimalNum = 0;
                 FinishedId.push_back(CurrentId);
                 bool conflict = true;
@@ -105,8 +109,9 @@ double CalculatorMainActivity::Calculate(int index)
         //error
         throw std::runtime_error("Syntax Error");
     }
-    if(CurrentNumPart!= 0)PlannedOperation.push_back(ToStringWithPrecision(CurrentNumPart));
+    if(HasPush == true)PlannedOperation.push_back(ToStringWithPrecision(CurrentNumPart));
     CurrentNumPart = 0;
+    HasPush = false;
     decimalNum = 0;
     bool hasDoneDefiningValue = false;
     while(hasDoneDefiningValue != true)

@@ -8,6 +8,7 @@
 #include <iostream>
 std::map<int, std::string> CalculatorMainActivity::ButtonClickInput;
 std::vector<std::string> CalculatorMainActivity::CurrentInput;
+int CalculatorMainActivity::CursorPosition = 1; //default = 
     
     // Then in your constructor:
     CalculatorMainActivity::CalculatorMainActivity(const wxString& title) 
@@ -71,8 +72,6 @@ void CalculatorMainActivity::UpdateContentWithCursor()
 }
 
 void CalculatorMainActivity::OnTimer(wxTimerEvent& event) {
-    DisplayCursor=(!DisplayCursor);
-    UpdateContentWithCursor();
 }
 
 void CalculatorMainActivity::UpdateTime() {
@@ -113,9 +112,11 @@ void CalculatorMainActivity::OnToggle(wxCommandEvent& event) {
         }else if(id_ == 1049)
         {
             if(CursorPosition -1 > 0) CursorPosition--;
+            ((CustomTextCtrl*)m_textCtrl)->Refreshs();
         }else if(id_ == 1050)
         {
             if(CursorPosition -1 < CurrentInput.size()) CursorPosition++;
+            ((CustomTextCtrl*)m_textCtrl)->Refreshs();
         }else if(id_ == 1054)
         {
             try {
