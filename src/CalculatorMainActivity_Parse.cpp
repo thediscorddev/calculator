@@ -70,6 +70,9 @@ double CalculatorMainActivity::Calculate(int index)
                     }
                     ValueList["__id_"+ToStringWithPrecision(CurrentId)].push_back(ToStringWithPrecision(constantList[a]));
                 }
+                CurrentNumPart = 0;
+                HasPush=false;
+                decimalNum = 0;
             }else if (a == "("|| a !=")")
             {
                 //KEEP AN EYE

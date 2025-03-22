@@ -22,6 +22,7 @@ private:
     void UpdateContentWithCursor();
     double Calculate(int index = 1);
     void PrepareFunction();
+    void CalculateDerivative();
     std::string GetDisplayString(std::string CurrentString, int pos);
     std::string ToStringWithPrecision(double value, int precision = 16);
     std::vector<std::string> CalculateOperation(std::vector<std::string> PlannedOperation_);

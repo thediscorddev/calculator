@@ -34,23 +34,20 @@ void CustomTextCtrl::OnPaint(wxPaintEvent& event) {
     CursorXLen = 0;
     
     int charWidth = 0, charHeight = 0;
-    wxString partialText; // String up to cursor
     
-    int i = 0;
+    int i = 1;
     for (const auto& el : CalculatorMainActivity::CurrentInput)
     {
-        if (i == CalculatorMainActivity::CursorPosition)
+        i++;
+        if (i >= CalculatorMainActivity::CursorPosition)
         {
             break;
         }
-        partialText += wxString(el); // Build string up to cursor
-        dc.GetTextExtent(wxString(el), &charWidth, &charHeight);
-        CursorXLen += charWidth; // Add actual character width
-        i++;
+        CursorXLen += el.size(); // Add actual character width
     }
     
     // Get the width of the full substring up to cursor
-    dc.GetTextExtent(partialText, &width, &height);
+    dc.GetTextExtent(m_secondOverlay.SubString(0, std::min(28,CursorXLen)), &width, &height);
     dc.DrawText("_", width - 10, 35);
     // should consider that this code has a fragment that could cause free after use.. Let's just call it segmentation fault for now.. Tbh even after I had OS dev, I am still as dumb as I was a kid.
 }
