@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include "Function_Composed.hpp"
 #include <functional>
 class CalculatorMainActivity : public wxFrame {
 public:
@@ -22,7 +23,8 @@ private:
     void UpdateContentWithCursor();
     double Calculate(int index = 1);
     void PrepareFunction();
-    void CalculateDerivative();
+    Function_Composed CalculateDerivative(Function_Composed &function);
+    Function_Composed CalculateDerivativeAndCreateNewOutLine(std::string OutlineType, std::shared_ptr<Function> Arg);
     std::string GetDisplayString(std::string CurrentString, int pos);
     std::string ToStringWithPrecision(double value, int precision = 16);
     std::vector<std::string> CalculateOperation(std::vector<std::string> PlannedOperation_);

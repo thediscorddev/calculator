@@ -7,7 +7,7 @@ class Function_Number: public Function
     private:
         std::string Number;
     public:
-        Function_Operation();
+        Function_Number();
         void PushOperation(std::string& Operation);
         std::string & GetData();
 };

@@ -8,6 +8,10 @@ void Function_Composed::PushOperation(std::string& Operation)
 {
     OutlineFunc = Operation;
 }
+void Function_Composed::PushOperation(std::string Operation)
+{
+    OutlineFunc = Operation;
+}
 void Function_Composed::PushComposed(std::shared_ptr<Function> Composed)
 {
     ComposedList.push_back(Composed);
