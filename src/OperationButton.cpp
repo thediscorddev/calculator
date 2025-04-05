@@ -36,3 +36,37 @@ void OperationButton::OnMouseLeave(wxMouseEvent& event)
     Refresh();  // Refresh the button to apply the color change
     event.Skip();
 }
+void OperationButton::ChangeTheme(unsigned int id)
+{
+    if(id == 0)
+    {
+        startColor = wxColour(128, 128, 128); // Initial color
+        hoverColor = wxColour(105, 105, 105); // Hover color (you can change it)
+        SetBackgroundColour(startColor);
+        SetForegroundColour(wxColour(255, 255, 255));
+    }else if(id == 1)
+    {
+        startColor = wxColour(30, 59, 137); // Initial color
+        hoverColor = wxColour(30, 0, 137); // Hover color (you can change it)
+        SetBackgroundColour(startColor);
+        SetForegroundColour(wxColour(255, 255, 255));
+    }else if(id == 2)
+    {
+        startColor = wxColour(254, 215, 0); // Initial color
+        hoverColor = wxColour(254, 155, 0); // Hover color (you can change it)
+        SetBackgroundColour(startColor);
+        SetForegroundColour(wxColour(255, 255, 255));
+    }else if (id == 3)
+    {
+        startColor = wxColour(255, 105, 180); // Initial color
+        hoverColor = wxColour(255, 20, 147); // Hover color (you can change it)
+        SetBackgroundColour(startColor);
+        SetForegroundColour(wxColour(255, 255, 255));
+    }else if(id == 4)
+    {
+        startColor = wxColour(255, 69, 0); // Initial color
+        hoverColor = wxColour(255, 0, 0); // Hover color (you can change it)
+        SetBackgroundColour(startColor);
+        SetForegroundColour(wxColour(255, 255, 255));
+    }
+}

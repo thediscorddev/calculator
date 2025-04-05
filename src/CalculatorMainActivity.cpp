@@ -6,6 +6,13 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "../scr/Button.hpp"
+#include "../scr/GreenButton.hpp"
+#include "../scr/BlackButton.hpp"
+#include "../scr/OperationButton.hpp"
+#include "../scr/SpecialButton.hpp"
+#include "../scr/ThemeChanger.hpp"
+unsigned int CalculatorMainActivity::theme = 0;  // Initialize here
 std::map<int, std::string> CalculatorMainActivity::ButtonClickInput;
 std::vector<std::string> CalculatorMainActivity::CurrentInput;
 int CalculatorMainActivity::CursorPosition = 1; // default =
@@ -15,19 +22,18 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString &title)
     : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(880, 600)),
       m_timer(this)
 {
-    wxInitAllImageHandlers();
-    // Ensure client size is exact
-    SetClientSize(wxSize(800, 510));
-    SetMinClientSize(wxSize(800, 510));
-    SetMaxClientSize(wxSize(800, 510));
-
-    PrepareFunction();
-
-    // Create the text box at (0,0) with size 800x200
+    wxImage::AddHandler(new wxPNGHandler());
     m_textCtrl = new CustomTextCtrl(this, wxID_ANY, wxPoint(0, 0), wxSize(800, 200));
     m_textCtrl->SetSize(m_textCtrl->GetSize().GetWidth(), m_textCtrl->GetSize().GetHeight());
     m_textCtrl->SetScrollPos(wxHORIZONTAL, 0);
     m_textCtrl->SetScrollbar(wxHORIZONTAL, 0, 0, 0);
+    wxInitAllImageHandlers();
+    // Ensure client size is exact
+    SetClientSize(wxSize(800, 510));
+
+    PrepareFunction();
+
+    // Create the text box at (0,0) with size 800x200
     // result = new TransparentStaticText(this, wxID_ANY, wxT(""), wxPoint(500, 210), wxSize(200, 100)); //
     ((CustomTextCtrl *)m_textCtrl)->SetOverlayText("");
 
@@ -86,7 +92,32 @@ void CalculatorMainActivity::UpdateTime()
     wxDateTime now = wxDateTime::Now();
     // m_textCtrl->SetSecondOverlayText(now.Format("%H:%M:%S")); // Update the text box with the current time
 }
-
+void CalculatorMainActivity::SwitchButtonTheme(unsigned int id)
+{
+    for (auto &a : FirstPageButton)
+    {
+        if (dynamic_cast<BlackButton *>(a.get()))
+        {
+            dynamic_cast<BlackButton *>(a.get())->ChangeTheme(id);
+        }
+        else if (dynamic_cast<GreenButton *>(a.get()))
+        {
+            dynamic_cast<GreenButton *>(a.get())->ChangeTheme(id);
+        }
+        else if (dynamic_cast<SpecialButton *>(a.get()))
+        {
+            dynamic_cast<SpecialButton *>(a.get())->ChangeTheme(id);
+        }
+        else if (dynamic_cast<OperationButton *>(a.get()))
+        {
+            dynamic_cast<OperationButton *>(a.get())->ChangeTheme(id);
+        }
+        else if (dynamic_cast<Button *>(a.get()))
+        {
+            dynamic_cast<Button *>(a.get())->ChangeTheme(id);
+        }
+    }
+}
 void CalculatorMainActivity::OnToggle(wxCommandEvent &event)
 {
     bool SpecialFunction = false;
@@ -148,6 +179,11 @@ void CalculatorMainActivity::OnToggle(wxCommandEvent &event)
                 // result->SetLabel(e.what());
                 ((CustomTextCtrl *)m_textCtrl)->SetOverlayText(e.what());
             }
+        }
+        else if (id_ == 1027)
+        {
+            ThemeChanger *frame = new ThemeChanger("Change button theme",this);
+            frame->Show(true);
         }
     }
 }

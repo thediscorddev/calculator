@@ -18,7 +18,40 @@ Button::Button(wxWindow* parent, wxWindowID id, const wxString& label, wxPoint p
     // Uncomment the line below if you want to handle click events
     // Bind(wxEVT_BUTTON, &Button::OnClick, this);
 }
-
+void Button::ChangeTheme(unsigned int id)
+{
+    if(id == 0)
+    {
+        startColor = wxColour(0, 0, 128); // Initial color
+        hoverColor = wxColour(0, 0, 110); // Hover color (you can change it)
+        SetBackgroundColour(startColor);
+        SetForegroundColour(wxColour(255, 255, 255));
+    }else if(id == 1)
+    {
+        startColor = wxColour(139, 44, 224); // Initial color
+        hoverColor = wxColour(139, 0, 224); // Hover color (you can change it)
+        SetBackgroundColour(startColor);
+        SetForegroundColour(wxColour(255, 255, 255));
+    }else if(id == 2)
+    {
+        startColor = wxColour(139, 44, 224); // Initial color
+        hoverColor = wxColour(139, 120, 224); // Hover color (you can change it)
+        SetBackgroundColour(startColor);
+        SetForegroundColour(wxColour(255, 255, 255));
+    }else if (id == 3)
+    {
+        startColor = wxColour(30, 144, 255); // Initial color
+        hoverColor = wxColour(0, 0, 205); // Hover color (you can change it)
+        SetBackgroundColour(startColor);
+        SetForegroundColour(wxColour(255, 255, 255));
+    }else if(id == 4)
+    {
+        startColor = wxColour(0, 191, 255); // Initial color
+        hoverColor = wxColour(30, 144, 255); // Hover color (you can change it)
+        SetBackgroundColour(startColor);
+        SetForegroundColour(wxColour(255, 255, 255));
+    }
+}
 void Button::OnClick(wxCommandEvent& event)
 {
     wxMessageBox("Button clicked: " + GetLabel(), "Info", wxOK | wxICON_INFORMATION);

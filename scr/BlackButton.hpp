@@ -8,7 +8,7 @@ public:
     BlackButton(wxWindow* parent, wxWindowID id, const wxString& label, wxPoint p, wxSize s);
 
     void OnClick(wxCommandEvent& event);
-
+    void ChangeTheme(unsigned int id);
 private:
     void OnMouseEnter(wxMouseEvent& event);
     void OnMouseLeave(wxMouseEvent& event);
