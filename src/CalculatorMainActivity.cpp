@@ -117,6 +117,30 @@ void CalculatorMainActivity::SwitchButtonTheme(unsigned int id)
             dynamic_cast<Button *>(a.get())->ChangeTheme(id);
         }
     }
+    for (auto &a : FirstPageButton_Shift)
+    {
+        if (dynamic_cast<BlackButton *>(a.get()))
+        {
+            dynamic_cast<BlackButton *>(a.get())->ChangeTheme(id);
+        }
+        else if (dynamic_cast<GreenButton *>(a.get()))
+        {
+            dynamic_cast<GreenButton *>(a.get())->ChangeTheme(id);
+        }
+        else if (dynamic_cast<SpecialButton *>(a.get()))
+        {
+            dynamic_cast<SpecialButton *>(a.get())->ChangeTheme(id);
+        }
+        else if (dynamic_cast<OperationButton *>(a.get()))
+        {
+            dynamic_cast<OperationButton *>(a.get())->ChangeTheme(id);
+        }
+        else if (dynamic_cast<Button *>(a.get()))
+        {
+            dynamic_cast<Button *>(a.get())->ChangeTheme(id);
+        }
+    }
+    this->Layout();
 }
 void CalculatorMainActivity::OnToggle(wxCommandEvent &event)
 {
@@ -184,6 +208,16 @@ void CalculatorMainActivity::OnToggle(wxCommandEvent &event)
         {
             ThemeChanger *frame = new ThemeChanger("Change button theme",this);
             frame->Show(true);
+        }else if(id_ == 1028)
+        {
+            Shift = (Shift==true)?false:true;
+            Alpha = false;
+            ShiftKeyboard();
+        }else if(id_ == 1029)
+        {
+            Alpha = (Alpha == true)?false:true;
+            Shift = false;
+            AlphaKeyboard();
         }
     }
 }

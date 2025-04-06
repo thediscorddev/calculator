@@ -81,4 +81,16 @@ void CalculatorMainActivity::HandleClick()
     ButtonClickInput[1077] = "antiderivative("; 
     ButtonClickInput[1078] = "derivative("; 
     ButtonClickInput[1079] = "SMORE"; 
+    ButtonClickInput[1080] = "arcsin("; 
+    ButtonClickInput[1081] = "arccos("; 
+    ButtonClickInput[1082] = "arctan("; 
+    ButtonClickInput[1083] = "arccot("; 
+    ButtonClickInput[1084] = "arcsec("; 
+    ButtonClickInput[1085] = "arccsc("; 
+    ButtonClickInput[1086] = "arcsinh("; 
+    ButtonClickInput[1087] = "arccosh("; 
+    ButtonClickInput[1088] = "arctanh("; 
+    ButtonClickInput[1089] = "arccoth("; 
+    ButtonClickInput[1090] = "arcsech("; 
+    ButtonClickInput[1091] = "arccsch("; 
 }

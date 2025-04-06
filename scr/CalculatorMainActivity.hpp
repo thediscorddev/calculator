@@ -14,6 +14,8 @@ public:
     static     int CursorPosition; //default
     void SwitchButtonTheme(unsigned int id);
 private:
+    bool Shift = false;
+    bool Alpha = false;
     void OnTimer(wxTimerEvent& event);
     void UpdateTime();
     void OnToggle(wxCommandEvent& event); // Handler for button toggle
@@ -25,6 +27,8 @@ private:
     void PrepareFunction();
     void OnResize(wxSizeEvent& event);
     static unsigned int theme; //default theme
+    void ShiftKeyboard();
+    void AlphaKeyboard();
     Function_Composed CalculateDerivative(Function_Composed &function);
     Function_Composed CalculateDerivativeAndCreateNewOutLine(std::string OutlineType, std::shared_ptr<Function> Arg);
     std::string GetDisplayString(std::string CurrentString, int pos);
@@ -34,9 +38,8 @@ private:
     static std::map<std::string, std::function<double(double)>> FunctionBatchOne;
     bool DisplayCursor = false;
     static std::map<int, std::string> ButtonClickInput;
-    std::vector<std::shared_ptr<wxButton>> FirstPageButton;
-    std::vector<std::shared_ptr<wxButton>> FirstPageButton_Shift;
-    std::vector<wxRect> FirstPageButtonRect;
+    std::vector<std::shared_ptr<wxButton>> FirstPageButton, FirstPageButton_ShiftAffect, FirstPageButton_Shift;
+    std::vector<wxRect> FirstPageButtonRect, FirstPageButtonShiftRect;
     std::vector<std::shared_ptr<wxButton>> SecondPageButton;
     wxTextCtrl* m_textCtrl;
     wxStaticText* result;

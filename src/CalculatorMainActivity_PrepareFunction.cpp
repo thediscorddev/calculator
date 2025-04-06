@@ -47,5 +47,17 @@ void CalculatorMainActivity::PrepareFunction()
     FunctionBatchOne["chi("] = [](double x) {return t_math::shi(x);};
     FunctionBatchOne["ci("] = [](double x) {return t_math::ci(x);};
     FunctionBatchOne["pow(10,"] = [](double x) {return t_math::pow(10,x);};
+    FunctionBatchOne["arcsin("] = [](double x) {return t_math::asin(x);};
+    FunctionBatchOne["arccos("] = [](double x) {return t_math::acos(x);};
+    FunctionBatchOne["arctan("] = [](double x) {return t_math::atan(x);};
+    FunctionBatchOne["arcsec("] = [](double x) {return t_math::asec(x);};
+    FunctionBatchOne["arccsc("] = [](double x) {return t_math::acsc(x);};
+    FunctionBatchOne["arccot("] = [](double x) {return t_math::acot(x);};
+    FunctionBatchOne["arcsinh("] = [](double x) {return t_math::asinh(x);};
+    FunctionBatchOne["arccosh("] = [](double x) {return t_math::acosh(x);};
+    FunctionBatchOne["arctanh("] = [](double x) {return t_math::atanh(x);};
+    FunctionBatchOne["arcsech("] = [](double x) {return t_math::asech(x);};
+    FunctionBatchOne["arccsch("] = [](double x) {return t_math::acsch(x);};
+    FunctionBatchOne["arccoth("] = [](double x) {return t_math::acoth(x);};
 
 }

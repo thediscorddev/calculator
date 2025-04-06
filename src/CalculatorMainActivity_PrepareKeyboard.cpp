@@ -19,18 +19,24 @@ wxBitmap prepareBitMap(std::string path)
     }
 
 
-    img.Rescale(100, 30);
+    img.Rescale(80, 24);
     return wxBitmap(img);
 }
 
 void CalculatorMainActivity::PrepareKeyboard()
 {
     wxBitmap sin_ = prepareBitMap("./image/sin.png");
+    wxBitmap arcsin_ = prepareBitMap("./image/arcsin.png");
+    wxBitmap arccos_ = prepareBitMap("./image/arccos.png");
+    wxBitmap arctan_ = prepareBitMap("./image/arctan.png");
     wxBitmap cos_ = prepareBitMap("./image/cos.png");
     wxBitmap tan_ = prepareBitMap("./image/tan.png");
     wxBitmap cot_ = prepareBitMap("./image/cot.png");
     wxBitmap sec_ = prepareBitMap("./image/sec.png");
     wxBitmap csc_ = prepareBitMap("./image/csc.png");
+    wxBitmap arccot_ = prepareBitMap("./image/arccot.png");
+    wxBitmap arcsec_ = prepareBitMap("./image/arcsec.png");
+    wxBitmap arccsc_ = prepareBitMap("./image/arccsc.png");
     wxBitmap li_ = prepareBitMap("./image/li.png");
     wxBitmap ci_ = prepareBitMap("./image/ci.png");
     wxBitmap si_ = prepareBitMap("./image/si.png");
@@ -51,6 +57,12 @@ void CalculatorMainActivity::PrepareKeyboard()
     wxBitmap sech_ = prepareBitMap("./image/sech.png");
     wxBitmap csch_ = prepareBitMap("./image/csch.png");
     wxBitmap coth_ = prepareBitMap("./image/coth.png");
+    wxBitmap arcsinh_ = prepareBitMap("./image/arcsinh.png");
+    wxBitmap arccosh_ = prepareBitMap("./image/arccosh.png");
+    wxBitmap arctanh_ = prepareBitMap("./image/arctanh.png");
+    wxBitmap arcsech_ = prepareBitMap("./image/arcsech.png");
+    wxBitmap arccsch_ = prepareBitMap("./image/arccsch.png");
+    wxBitmap arccoth_ = prepareBitMap("./image/arccoth.png");
     wxBitmap abs_ = prepareBitMap("./image/abs.png");
     wxBitmap floor_ = prepareBitMap("./image/floor.png");
     wxBitmap ceil_ = prepareBitMap("./image/ceil.png");
@@ -156,10 +168,13 @@ void CalculatorMainActivity::PrepareKeyboard()
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(pow_);
     FirstPageButton.push_back(std::make_shared<Button>(this, 1024, "", wxPoint(0, 240), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(sin_);
+    FirstPageButton_ShiftAffect.push_back(FirstPageButton.at(FirstPageButton.size() -1 ));
     FirstPageButton.push_back(std::make_shared<Button>(this, 1025, "", wxPoint(100, 240), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(cos_);
+    FirstPageButton_ShiftAffect.push_back(FirstPageButton.at(FirstPageButton.size() -1 ));
     FirstPageButton.push_back(std::make_shared<Button>(this, 1026, "", wxPoint(200, 240), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(tan_);
+    FirstPageButton_ShiftAffect.push_back(FirstPageButton.at(FirstPageButton.size() -1 ));
     FirstPageButton.push_back(std::make_shared<Button>(this, 1027, "", wxPoint(0, 210), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(opt_);
     FirstPageButton.push_back(std::make_shared<Button>(this, 1028, "", wxPoint(100, 210), wxSize(100, 30)));
@@ -168,10 +183,13 @@ void CalculatorMainActivity::PrepareKeyboard()
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(alpha_);
     FirstPageButton.push_back(std::make_shared<Button>(this, 1030, "", wxPoint(300, 240), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(cot_);
+    FirstPageButton_ShiftAffect.push_back(FirstPageButton.at(FirstPageButton.size() -1 ));
     FirstPageButton.push_back(std::make_shared<Button>(this, 1031, "", wxPoint(400, 240), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(sec_);
+    FirstPageButton_ShiftAffect.push_back(FirstPageButton.at(FirstPageButton.size() -1 ));
     FirstPageButton.push_back(std::make_shared<Button>(this, 1032, "", wxPoint(500, 240), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(csc_);
+    FirstPageButton_ShiftAffect.push_back(FirstPageButton.at(FirstPageButton.size() -1 ));
     FirstPageButton.push_back(std::make_shared<Button>(this, 1033, "", wxPoint(300, 270), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(ln_);
     FirstPageButton.push_back(std::make_shared<Button>(this, 1034, "", wxPoint(400, 270), wxSize(100, 30)));
@@ -186,16 +204,22 @@ void CalculatorMainActivity::PrepareKeyboard()
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(factorial_);
     FirstPageButton.push_back(std::make_shared<Button>(this, 1039, "", wxPoint(300, 330), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(sinh_);
+    FirstPageButton_ShiftAffect.push_back(FirstPageButton.at(FirstPageButton.size() -1 ));
     FirstPageButton.push_back(std::make_shared<Button>(this, 1040, "", wxPoint(400, 330), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(cosh_);
+    FirstPageButton_ShiftAffect.push_back(FirstPageButton.at(FirstPageButton.size() -1 ));
     FirstPageButton.push_back(std::make_shared<Button>(this, 1041, "", wxPoint(500, 330), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(tanh_);
+    FirstPageButton_ShiftAffect.push_back(FirstPageButton.at(FirstPageButton.size() -1 ));
     FirstPageButton.push_back(std::make_shared<Button>(this, 1042, "", wxPoint(300, 360), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(coth_);
+    FirstPageButton_ShiftAffect.push_back(FirstPageButton.at(FirstPageButton.size() -1 ));
     FirstPageButton.push_back(std::make_shared<Button>(this, 1043, "", wxPoint(400, 360), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(sech_);
+    FirstPageButton_ShiftAffect.push_back(FirstPageButton.at(FirstPageButton.size() -1 ));
     FirstPageButton.push_back(std::make_shared<Button>(this, 1044, "", wxPoint(500, 360), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(csch_);
+    FirstPageButton_ShiftAffect.push_back(FirstPageButton.at(FirstPageButton.size() -1 ));
     FirstPageButton.push_back(std::make_shared<Button>(this, 1045, "", wxPoint(300, 390), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(abs_);
     FirstPageButton.push_back(std::make_shared<Button>(this, 1046, "", wxPoint(400, 390), wxSize(100, 30)));
@@ -266,11 +290,44 @@ void CalculatorMainActivity::PrepareKeyboard()
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(derivative_);
     FirstPageButton.push_back(std::make_shared<Button>(this, 1079, "", wxPoint(700, 210), wxSize(100, 30)));
     FirstPageButton.at(FirstPageButton.size() - 1)->SetBitmap(more_);
+    FirstPageButton_Shift.push_back(std::make_shared<Button>(this, 1080, "", wxPoint(0, 240), wxSize(100, 30)));
+    FirstPageButton_Shift.at(FirstPageButton_Shift.size() - 1)->SetBitmap(arcsin_);
+    FirstPageButton_Shift.push_back(std::make_shared<Button>(this, 1081, "", wxPoint(100, 240), wxSize(100, 30)));
+    FirstPageButton_Shift.at(FirstPageButton_Shift.size() - 1)->SetBitmap(arccos_);
+    FirstPageButton_Shift.push_back(std::make_shared<Button>(this, 1082, "", wxPoint(200, 240), wxSize(100, 30)));
+    FirstPageButton_Shift.at(FirstPageButton_Shift.size() - 1)->SetBitmap(arctan_);
+    FirstPageButton_Shift.push_back(std::make_shared<Button>(this, 1083, "", wxPoint(300, 240), wxSize(100, 30)));
+    FirstPageButton_Shift.at(FirstPageButton_Shift.size() - 1)->SetBitmap(arccot_);
+    FirstPageButton_Shift.push_back(std::make_shared<Button>(this, 1084, "", wxPoint(400, 240), wxSize(100, 30)));
+    FirstPageButton_Shift.at(FirstPageButton_Shift.size() - 1)->SetBitmap(arcsec_);
+    FirstPageButton_Shift.push_back(std::make_shared<Button>(this, 1085, "", wxPoint(500, 240), wxSize(100, 30)));
+    FirstPageButton_Shift.at(FirstPageButton_Shift.size() - 1)->SetBitmap(arccsc_);
+    FirstPageButton_Shift.push_back(std::make_shared<Button>(this, 1086, "", wxPoint(300, 330), wxSize(100, 30)));
+    FirstPageButton_Shift.at(FirstPageButton_Shift.size() - 1)->SetBitmap(arcsinh_);
+    FirstPageButton_Shift.push_back(std::make_shared<Button>(this, 1087, "", wxPoint(400, 330), wxSize(100, 30)));
+    FirstPageButton_Shift.at(FirstPageButton_Shift.size() - 1)->SetBitmap(arccosh_);
+    FirstPageButton_Shift.push_back(std::make_shared<Button>(this, 1088, "", wxPoint(500, 330), wxSize(100, 30)));
+    FirstPageButton_Shift.at(FirstPageButton_Shift.size() - 1)->SetBitmap(arctanh_);
+    FirstPageButton_Shift.push_back(std::make_shared<Button>(this, 1089, "", wxPoint(300, 360), wxSize(100, 30)));
+    FirstPageButton_Shift.at(FirstPageButton_Shift.size() - 1)->SetBitmap(arccoth_);
+    FirstPageButton_Shift.push_back(std::make_shared<Button>(this, 1090, "", wxPoint(400, 360), wxSize(100, 30)));
+    FirstPageButton_Shift.at(FirstPageButton_Shift.size() - 1)->SetBitmap(arcsech_);
+    FirstPageButton_Shift.push_back(std::make_shared<Button>(this, 1091, "", wxPoint(500, 360), wxSize(100, 30)));
+    FirstPageButton_Shift.at(FirstPageButton_Shift.size() - 1)->SetBitmap(arccsch_);
+    for(auto & a: FirstPageButton_Shift)
+    {
+        a->Hide();
+    }
     this->Layout(); // Ensure layout is refreshed
     wxYield();      // Let the system update layout
     for (auto &a : FirstPageButton)
     {
         // push rect
         FirstPageButtonRect.push_back(a->GetRect());
+    }
+    for (auto &a : FirstPageButton_Shift)
+    {
+        // push rect
+        FirstPageButtonShiftRect.push_back(a->GetRect());
     }
 }

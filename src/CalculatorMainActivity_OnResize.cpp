@@ -24,9 +24,24 @@ void CalculatorMainActivity::OnResize(wxSizeEvent &event)
 
         // Resize bitmap
         wxImage img = FirstPageButton[i]->GetBitmap().ConvertToImage();                                               // Convert wxBitmap to wxImage
-        img.Rescale(static_cast<int>(mX * elRect.width), static_cast<int>(mY * elRect.height), wxIMAGE_QUALITY_HIGH); // Resize bitmap
+        img.Rescale(static_cast<int>(mX * elRect.width*0.8), static_cast<int>(mY * elRect.height*0.8), wxIMAGE_QUALITY_HIGH); // Resize bitmap
         wxBitmap resizedBitmap(img);                                                                                  // Convert back to wxBitmap
         FirstPageButton[i]->SetBitmap(resizedBitmap);
+    }
+    for (int i = 0; i < FirstPageButton_Shift.size(); i++)
+    {
+        wxRect &elRect = FirstPageButtonShiftRect.at(i);
+
+        FirstPageButton_Shift[i]->SetSize(wxRect(static_cast<int>(mX * elRect.x),
+                                           static_cast<int>(mY * elRect.y),
+                                           static_cast<int>(mX * elRect.width),
+                                           static_cast<int>(mY * elRect.height)));
+
+        // Resize bitmap
+        wxImage img = FirstPageButton_Shift[i]->GetBitmap().ConvertToImage();                                               // Convert wxBitmap to wxImage
+        img.Rescale(static_cast<int>(mX * elRect.width*0.8), static_cast<int>(mY * elRect.height*0.8), wxIMAGE_QUALITY_HIGH); // Resize bitmap
+        wxBitmap resizedBitmap(img);                                                                                  // Convert back to wxBitmap
+        FirstPageButton_Shift[i]->SetBitmap(resizedBitmap);
     }
     if(m_textCtrl != nullptr)
     {
