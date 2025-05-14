@@ -3,7 +3,7 @@ Function_Operation::Function_Operation()
 {
     Type = "Operation";
 }
-void Function_Operation::PushOperation(std::string& Operation)
+void Function_Operation::PushOperation(const std::string& Operation)
 {
     OperationType = Operation;
 }

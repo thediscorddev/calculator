@@ -1,1 +1,1 @@
- g++ main.cpp src/*.cpp `wx-config --cxxflags --libs` -o compile/myapp -Id:/
+g++ -g main.cpp src/*.cpp `wx-config --cxxflags --libs` -o compile/myapp -Id:/

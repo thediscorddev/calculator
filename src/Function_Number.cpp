@@ -3,7 +3,7 @@ Function_Number::Function_Number()
 {
     Type = "Number";
 }
-void Function_Number::PushOperation(std::string& Operation)
+void Function_Number::PushOperation(const std::string& Operation)
 {
     Number = Operation; //This do includes constant like X, x, y, pi, e,...
 }

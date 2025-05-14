@@ -1,14 +1,12 @@
 #include "../scr/Function_Composed.hpp"
+#include "../scr/Function_Operation.hpp"
+#include <stdexcept>
 Function_Composed::Function_Composed()
 {
     Type = "Composed";
     OutlineFunc = "ComposedOperationSpecialNoInitalized";
 }
-void Function_Composed::PushOperation(std::string& Operation)
-{
-    OutlineFunc = Operation;
-}
-void Function_Composed::PushOperation(std::string Operation)
+void Function_Composed::PushOperation(const std::string &Operation)
 {
     OutlineFunc = Operation;
 }
@@ -16,11 +14,212 @@ void Function_Composed::PushComposed(std::shared_ptr<Function> Composed)
 {
     ComposedList.push_back(Composed);
 }
-std::string & Function_Composed::GetData()
+std::string &Function_Composed::GetData()
 {
     return OutlineFunc;
 }
-std::vector<std::shared_ptr<Function>> & Function_Composed::GetComposedData()
+std::vector<std::shared_ptr<Function>> &Function_Composed::GetComposedData()
 {
     return ComposedList;
+}
+bool Function_Composed::ContainsUnknown()
+{
+    for (const auto &a : ComposedList)
+    {
+        auto ptr = std::dynamic_pointer_cast<Function_Composed>(a);
+        if (ptr != nullptr)
+        {
+            if (!ptr->ContainsUnknown())
+                return false;
+        }
+        auto ptr1 = std::dynamic_pointer_cast<Function_Number>(a);
+        if (ptr1 != nullptr)
+        {
+            try
+            {
+                /* code */
+                std::stod(ptr1->GetData());
+            }
+            catch (const std::exception &e)
+            {
+                // Cannot convert it to decimal
+                return false;
+            }
+        }
+    }
+    return true;
+}
+Function_Number Function_Composed::Calculate()
+{
+    Function_Number finalNumber;
+    std::vector<std::string> OperationList;
+    int i = 0;
+    while (i < ComposedList.size())
+    {
+        auto ptr = std::dynamic_pointer_cast<Function_Composed>(ComposedList.at(i));
+        if (ptr)
+        {
+            Function_Number Result = ptr->Calculate();
+            OperationList.push_back(Result.GetData());
+        }
+        auto ptr1 = std::dynamic_pointer_cast<Function_Number>(ComposedList.at(i));
+        if (ptr1)
+        {
+            // A single number
+            if (OperationList.size() > 0)
+            {
+                std::string LastElement = OperationList.at(OperationList.size() - 1);
+                try
+                {
+                    std::stod(LastElement);
+                    // a number
+                    OperationList.push_back("*");
+                }
+                catch (const std::exception &e)
+                {
+                    // Not a number
+                }
+            }
+            try
+            {
+                std::stod(ptr1->GetData());
+                // A number
+                OperationList.push_back(ptr1->GetData());
+            }
+            catch (const std::exception &e)
+            {
+                // An unknown.. or a variable
+                OperationList.push_back("0");
+            }
+        }
+        auto ptr2 = std::dynamic_pointer_cast<Function_Operation>(ComposedList.at(i));
+        if (ptr2)
+        {
+            // AN operation like +, -, *, /
+            OperationList.push_back(ptr2->GetData());
+        }
+        i++;
+    }
+    // We have arrived, now it is time to reduce
+    while (true)
+    {
+        // Reduce these number
+        bool StillHasSpecial = false;
+        int i = 0;
+        while (i < OperationList.size())
+        {
+            std::string Element = OperationList.at(i);
+            if (Element == "*")
+            {
+                StillHasSpecial = true;
+                if (i <= 0 || i >= OperationList.size() - 1)
+                    throw std::runtime_error("Syntax error");
+                std::string ElementL = OperationList.at(i - 1);
+                std::string ElementF = OperationList.at(i + 1);
+                try
+                {
+                    double a = std::stod(ElementL);
+                    double b = std::stod(ElementF);
+                    double c = a * b;
+                    OperationList.erase(OperationList.begin() + (i - 1), OperationList.begin() + (i + 2));
+                    // Insert the new value at the old i-1 position
+                    OperationList.insert(OperationList.begin() + (i - 1), std::to_string(c));
+                }
+                catch (const std::exception &e)
+                {
+                    throw std::runtime_error("Syntax error");
+                }
+
+                break;
+            }
+            else if (Element == "/")
+            {
+                StillHasSpecial = true;
+                if (i <= 0 || i >= OperationList.size() - 1)
+                    throw std::runtime_error("Syntax error");
+                if (OperationList.at(i + 1) == "0")
+                    throw std::runtime_error("Math error");
+                std::string ElementL = OperationList.at(i - 1);
+                std::string ElementF = OperationList.at(i + 1);
+                try
+                {
+                    double a = std::stod(ElementL);
+                    double b = std::stod(ElementF);
+                    double c = a / b;
+                    OperationList.erase(OperationList.begin() + (i - 1), OperationList.begin() + (i + 2));
+                    // Insert the new value at the old i-1 position
+                    OperationList.insert(OperationList.begin() + (i - 1), std::to_string(c));
+                }
+                catch (const std::exception &e)
+                {
+                    throw std::runtime_error("Syntax error");
+                }
+                break;
+            }
+            i++;
+        }
+        if (StillHasSpecial == false)
+            break;
+    }
+    while (OperationList.size() > 1)
+    {
+        int i = 0;
+        while (i < OperationList.size())
+        {
+            std::string Element = OperationList.at(i);
+            if (Element == "+")
+            {
+                if (i <= 0 || i >= OperationList.size() - 1)
+                    throw std::runtime_error("Syntax error");
+                std::string ElementL = OperationList.at(i - 1);
+                std::string ElementF = OperationList.at(i + 1);
+                try
+                {
+                    double a = std::stod(ElementL);
+                    double b = std::stod(ElementF);
+                    double c = a + b;
+                    OperationList.erase(OperationList.begin() + (i - 1), OperationList.begin() + (i + 2));
+                    // Insert the new value at the old i-1 position
+                    OperationList.insert(OperationList.begin() + (i - 1), std::to_string(c));
+                }
+                catch (const std::exception &e)
+                {
+                    throw std::runtime_error("Syntax error");
+                }
+
+                break;
+            }
+            else if (Element == "-")
+            {
+                if (i <= 0 || i >= OperationList.size() - 1)
+                    throw std::runtime_error("Syntax error");
+                std::string ElementL = OperationList.at(i - 1);
+                std::string ElementF = OperationList.at(i + 1);
+                try
+                {
+                    double a = std::stod(ElementL);
+                    double b = std::stod(ElementF);
+                    double c = a - b;
+                    OperationList.erase(OperationList.begin() + (i - 1), OperationList.begin() + (i + 2));
+                    // Insert the new value at the old i-1 position
+                    OperationList.insert(OperationList.begin() + (i - 1), std::to_string(c));
+                }
+                catch (const std::exception &e)
+                {
+                    throw std::runtime_error("Syntax error");
+                }
+                break;
+            }
+            i++;
+        }
+    }
+    //Now that the element only has 1 number
+    if(OutlineFunc == "ComposedOperationSpecialNoInitalized")
+    {
+        finalNumber.PushOperation(OperationList.at(0));
+    }else {
+        double num = FunctionAndConstantList::FunctionOneVar[OutlineFunc](std::stod(OperationList.at(0)));
+        finalNumber.PushOperation(std::to_string(num));
+    }
+    return finalNumber;
 }

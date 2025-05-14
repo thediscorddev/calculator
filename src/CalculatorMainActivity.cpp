@@ -12,6 +12,7 @@
 #include "../scr/OperationButton.hpp"
 #include "../scr/SpecialButton.hpp"
 #include "../scr/ThemeChanger.hpp"
+#include "../scr/ResultDisplay.hpp"
 unsigned int CalculatorMainActivity::theme = 0;  // Initialize here
 std::map<int, std::string> CalculatorMainActivity::ButtonClickInput;
 std::vector<std::string> CalculatorMainActivity::CurrentInput;
@@ -197,11 +198,12 @@ void CalculatorMainActivity::OnToggle(wxCommandEvent &event)
 
                 // Option 1: wxString::Format (recommended)
                 ((CustomTextCtrl *)m_textCtrl)->SetOverlayText(wxString::Format("%.10g", result)); // Format as string
+                ResultDisplay *frame = new ResultDisplay("Result",NULL);
             }
             catch (std::exception &e)
             {
                 // result->SetLabel(e.what());
-                ((CustomTextCtrl *)m_textCtrl)->SetOverlayText(e.what());
+                ResultDisplay *frame = new ResultDisplay("Error",e.what());
             }
         }
         else if (id_ == 1027)

@@ -1,14 +1,18 @@
 #include "../scr/CalculatorMainActivity.hpp"
+#include "../scr/FunctionAndConstantList.hpp"
 #include <TMATH/t_math.hpp>
 #include <string>
 #include <functional>
 #include <map>
 std::map<std::string, double> CalculatorMainActivity::constantList;
 std::map<std::string, std::function<double(double)>> CalculatorMainActivity::FunctionBatchOne;
+std::map<std::string, double> FunctionAndConstantList::constantList;
+std::map<std::string, std::function<double(double)>> FunctionAndConstantList::FunctionOneVar;
 void CalculatorMainActivity::PrepareFunction()
 {
     constantList["pi"] = t_math::pi;
     constantList["e"] = t_math::e;
+    FunctionAndConstantList::constantList = constantList;
     FunctionBatchOne["sin("] = [](double x) {return t_math::sin(x);};
     FunctionBatchOne["cos("] = [](double x) {return t_math::cos(x);};
     FunctionBatchOne["tan("] = [](double x) {return t_math::tan(x);};
@@ -59,5 +63,5 @@ void CalculatorMainActivity::PrepareFunction()
     FunctionBatchOne["arcsech("] = [](double x) {return t_math::asech(x);};
     FunctionBatchOne["arccsch("] = [](double x) {return t_math::acsch(x);};
     FunctionBatchOne["arccoth("] = [](double x) {return t_math::acoth(x);};
-
+    FunctionAndConstantList::FunctionOneVar = FunctionBatchOne;
 }

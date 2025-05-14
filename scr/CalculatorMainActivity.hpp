@@ -5,8 +5,14 @@
 #include <vector>
 #include <string>
 #include <map>
+#include "Function.hpp"
 #include "Function_Composed.hpp"
 #include <functional>
+struct FunctionReturn
+{
+    bool IsNull = true;
+    std::shared_ptr<Function> func = nullptr;
+};
 class CalculatorMainActivity : public wxFrame {
 public:
     CalculatorMainActivity(const wxString& title);
@@ -41,6 +47,8 @@ private:
     std::vector<std::shared_ptr<wxButton>> FirstPageButton, FirstPageButton_ShiftAffect, FirstPageButton_Shift;
     std::vector<wxRect> FirstPageButtonRect, FirstPageButtonShiftRect;
     std::vector<std::shared_ptr<wxButton>> SecondPageButton;
+    FunctionReturn GetCurrentPosition_(std::shared_ptr<Function_Composed> func, int id, bool Create = true);
+    std::shared_ptr<Function> GetCurrentPosition(std::shared_ptr<Function_Composed> func, int id, bool Create = true);
     wxTextCtrl* m_textCtrl;
     wxStaticText* result;
     wxButton* m_toggleButton; // Button for toggling

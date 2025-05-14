@@ -8,6 +8,6 @@ class Function_Number: public Function
         std::string Number;
     public:
         Function_Number();
-        void PushOperation(std::string& Operation);
+        void PushOperation(const std::string& Operation);
         std::string & GetData();
 };
