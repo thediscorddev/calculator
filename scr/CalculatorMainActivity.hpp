@@ -7,6 +7,7 @@
 #include <map>
 #include "Function.hpp"
 #include "Function_Composed.hpp"
+#include "Function_Variable.hpp"
 #include <functional>
 struct FunctionReturn
 {

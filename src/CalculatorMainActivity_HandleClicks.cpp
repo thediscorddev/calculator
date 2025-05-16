@@ -38,7 +38,7 @@ void CalculatorMainActivity::HandleClick()
     ButtonClickInput[1034] = "log10("; 
     ButtonClickInput[1035] = "log("; 
     ButtonClickInput[1036] = "nroot("; 
-    ButtonClickInput[1037] = "ifrac("; 
+    ButtonClickInput[1037] = "x"; //ifrac( 
     ButtonClickInput[1038] = "fac("; 
     ButtonClickInput[1039] = "sinh("; 
     ButtonClickInput[1040] = "cosh("; 

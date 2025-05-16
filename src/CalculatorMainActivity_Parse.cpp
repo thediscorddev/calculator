@@ -7,8 +7,9 @@
 #include <vector>
 #include <map>
 #include <string>
+#include "../scr/Derivative.hpp"
 #include <stdexcept>
-static     std::vector<int> FinishedId;
+static std::vector<int> FinishedId;
 std::shared_ptr<Function> CalculatorMainActivity::GetCurrentPosition(std::shared_ptr<Function_Composed> func, int id, bool Create)
 {
     return GetCurrentPosition_(func, id, Create).func;
@@ -16,8 +17,9 @@ std::shared_ptr<Function> CalculatorMainActivity::GetCurrentPosition(std::shared
 FunctionReturn CalculatorMainActivity::GetCurrentPosition_(std::shared_ptr<Function_Composed> func, int id, bool Create)
 {
     FunctionReturn Data;
-    int cid = id-1;
-    if (id <= 0) {
+    int cid = id - 1;
+    if (id <= 0)
+    {
         Data.IsNull = false;
         Data.func = func;
         return Data;
@@ -31,28 +33,31 @@ FunctionReturn CalculatorMainActivity::GetCurrentPosition_(std::shared_ptr<Funct
             Data.IsNull = false;
             Data.func = a;
             return Data;
-        }else {
+        }
+        else
+        {
             auto ptr = std::dynamic_pointer_cast<Function_Composed>(a);
-            if(ptr)
+            if (ptr)
             {
-                //a function composed
-                FunctionReturn Data = GetCurrentPosition_(ptr,id,false);
-                if(Data.IsNull == false) return Data;
+                // a function composed
+                FunctionReturn Data = GetCurrentPosition_(ptr, id, false);
+                if (Data.IsNull == false)
+                    return Data;
             }
         }
-        //No returning
-        //We might as well check if it would return anything
+        // No returning
+        // We might as well check if it would return anything
     }
 
     // Recurse to create the previous level
     // Other function stay inside should be at
     //
-    if(!Create)
+    if (!Create)
     {
         return Data;
     }
-    //This case is where we were told to create
-    //To create, assuming the func has not finished yet
+    // This case is where we were told to create
+    // To create, assuming the func has not finished yet
     bool conflict = true;
     while (conflict)
     {
@@ -123,6 +128,36 @@ double CalculatorMainActivity::Calculate(int index)
             if (a == ".")
             {
                 decimalNum = 1;
+            }
+            else if (a == "x")
+            {
+                std::shared_ptr<Function> number_ = std::make_shared<Function_Variable>();
+                number_->PushOperation(a);
+                std::shared_ptr<Function> number = std::make_shared<Function_Number>();
+                std::shared_ptr<Function> op = std::make_shared<Function_Operation>();
+                op->PushOperation("*");
+                number->PushOperation(ToStringWithPrecision(CurrentNumPart));
+                if (CurrentId == 0)
+                {
+                    if (HasPush == true) {
+                                                FullFunction->PushComposed(number);
+                    FullFunction->PushComposed(op);
+                    }
+                    FullFunction->PushComposed(number_);
+                }
+                else
+                {
+                    auto pos_ = std::dynamic_pointer_cast<Function_Composed>(GetCurrentPosition(FullFunction, CurrentId));
+                    if (HasPush == true)
+                    {
+                        pos_->PushComposed(number);
+                                            pos_->PushComposed(op);
+                    }
+                    pos_->PushComposed(number_);
+                }
+                CurrentNumPart = 0;
+                HasPush = false;
+                decimalNum = 0;
             }
             else if (a == "+" || a == "-" || a == "*" || a == "/")
             {
@@ -322,6 +357,13 @@ double CalculatorMainActivity::Calculate(int index)
     }
     */
     // return std::stod(NewValues.at(0));
+    std::cout << FullFunction->toString() << std::endl;
+    if(FullFunction->ContainsUnknown())
+    {
+        auto deri = derivative::Derivative(FullFunction);
+        std::cout << deri->toString() << std::endl;
+      return 12;  
+    }
     return std::stod(FullFunction->Calculate().GetData());
 }
 /*

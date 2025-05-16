@@ -1,5 +1,6 @@
 #include "../scr/Function_Composed.hpp"
 #include "../scr/Function_Operation.hpp"
+#include "../scr/Function_Variable.hpp"
 #include <stdexcept>
 Function_Composed::Function_Composed()
 {
@@ -13,6 +14,45 @@ void Function_Composed::PushOperation(const std::string &Operation)
 void Function_Composed::PushComposed(std::shared_ptr<Function> Composed)
 {
     ComposedList.push_back(Composed);
+}
+std::string Function_Composed::toString()
+{
+    std::string originalStr = ""; 
+    if(OutlineFunc != "ComposedOperationSpecialNoInitalized") originalStr += OutlineFunc;
+    for (const auto &a : ComposedList)
+    {
+        auto ptr = std::dynamic_pointer_cast<Function_Composed>(a);
+        if (ptr != nullptr)
+        {
+            if (ptr->GetData() == "ComposedOperationSpecialNoInitalized")
+            {
+                std::string display = ptr->toString();
+                if (display != "")
+                {
+                    originalStr += "(" + display + ")";
+                }
+            }
+            else
+            {
+                std::string display = ptr->toString();
+                if (display != "")
+                {
+                    originalStr += display;
+                }
+            }
+        }else {
+            originalStr += a->GetData();
+        }
+    }
+    if(OutlineFunc != "ComposedOperationSpecialNoInitalized") originalStr += ")";
+    return originalStr;
+}
+void Function_Composed::PushComposed(std::vector<std::shared_ptr<Function>> Composed)
+{
+    for (auto &a : Composed)
+    {
+        ComposedList.push_back(a);
+    }
 }
 std::string &Function_Composed::GetData()
 {
@@ -29,25 +69,14 @@ bool Function_Composed::ContainsUnknown()
         auto ptr = std::dynamic_pointer_cast<Function_Composed>(a);
         if (ptr != nullptr)
         {
-            if (!ptr->ContainsUnknown())
-                return false;
+            if (ptr->ContainsUnknown())
+                return true;
         }
-        auto ptr1 = std::dynamic_pointer_cast<Function_Number>(a);
+        auto ptr1 = std::dynamic_pointer_cast<Function_Variable>(a);
         if (ptr1 != nullptr)
-        {
-            try
-            {
-                /* code */
-                std::stod(ptr1->GetData());
-            }
-            catch (const std::exception &e)
-            {
-                // Cannot convert it to decimal
-                return false;
-            }
-        }
+            return true;
     }
-    return true;
+    return false;
 }
 Function_Number Function_Composed::Calculate()
 {
@@ -213,11 +242,13 @@ Function_Number Function_Composed::Calculate()
             i++;
         }
     }
-    //Now that the element only has 1 number
-    if(OutlineFunc == "ComposedOperationSpecialNoInitalized")
+    // Now that the element only has 1 number
+    if (OutlineFunc == "ComposedOperationSpecialNoInitalized")
     {
         finalNumber.PushOperation(OperationList.at(0));
-    }else {
+    }
+    else
+    {
         double num = FunctionAndConstantList::FunctionOneVar[OutlineFunc](std::stod(OperationList.at(0)));
         finalNumber.PushOperation(std::to_string(num));
     }

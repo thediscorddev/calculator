@@ -14,8 +14,10 @@ class Function_Composed: public Function
         Function_Composed();
         void PushOperation(const std::string& Operation);
         void PushComposed(std::shared_ptr<Function> Composed);
+        void PushComposed(std::vector<std::shared_ptr<Function>> Composed);
         std::string & GetData();
         std::vector<std::shared_ptr<Function>> & GetComposedData();
         bool ContainsUnknown();
         Function_Number Calculate();
+        std::string toString();
 };

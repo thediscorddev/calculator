@@ -13,6 +13,7 @@
 #include "../scr/SpecialButton.hpp"
 #include "../scr/ThemeChanger.hpp"
 #include "../scr/ResultDisplay.hpp"
+#include "../scr/Derivative.hpp"
 unsigned int CalculatorMainActivity::theme = 0;  // Initialize here
 std::map<int, std::string> CalculatorMainActivity::ButtonClickInput;
 std::vector<std::string> CalculatorMainActivity::CurrentInput;
@@ -51,6 +52,7 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString &title)
     // Other init
     PrepareKeyboard();
     HandleClick();
+    derivative::prepareDerivativeTable();
     m_timer.Start(500); // Start timer
 
     m_textCtrl->Enable(false);
