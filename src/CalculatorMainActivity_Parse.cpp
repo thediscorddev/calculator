@@ -357,11 +357,11 @@ double CalculatorMainActivity::Calculate(int index)
     }
     */
     // return std::stod(NewValues.at(0));
-    std::cout << FullFunction->toString() << std::endl;
+    std::cout << "original function:" << FullFunction->toString() << std::endl;
     if(FullFunction->ContainsUnknown())
     {
         auto deri = derivative::Derivative(FullFunction);
-        std::cout << deri->toString() << std::endl;
+        std::cout << "derivated function:" << deri->toString() << std::endl;
       return 12;  
     }
     return std::stod(FullFunction->Calculate().GetData());

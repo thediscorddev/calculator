@@ -32,16 +32,29 @@ std::shared_ptr<Function_Composed> derivative::Derivative(std::shared_ptr<Functi
         auto ptr = std::dynamic_pointer_cast<Function_Composed>(Func->GetComposedData().at(0));
         if (!ptr)
         {
+            if (std::dynamic_pointer_cast<Function_Variable>(Func->GetComposedData().at(0)) != nullptr)
+            {
+                // an variable
+                std::shared_ptr<Function_Number> one = std::make_shared<Function_Number>();
+                one->PushOperation("1");
+                finalFunction->PushComposed(one);
+            }
+            else
+            {
+                std::shared_ptr<Function_Number> zero = std::make_shared<Function_Number>();
+                zero->PushOperation("0");
+                finalFunction->PushComposed(zero);
+            }
             // Not a composed, a number or an operation
-            std::shared_ptr<Function_Number> zero = std::make_shared<Function_Number>();
-            zero->PushOperation("0");
-            finalFunction->PushComposed(zero);
         }
         else
         {
             // the pointer exist
             // Since we only have 1 arg
-            finalFunction->PushComposed(ChainRule(Func));
+            if (Func->GetData() == "ComposedOperationSpecialNoInitalized")
+                finalFunction->PushComposed(ChainRule(Func->GetComposedData().at(0)));
+            else
+                finalFunction->PushComposed(ChainRule(Func));
         }
     }
     else
@@ -177,6 +190,14 @@ std::shared_ptr<Function_Composed> derivative::ProductRule(std::shared_ptr<Funct
     auto Func = std::dynamic_pointer_cast<Function_Composed>(Func_);
     if (!Func)
     {
+        if (std::dynamic_pointer_cast<Function_Variable>(Func_) != nullptr)
+        {
+            // an variable
+            std::shared_ptr<Function_Number> one = std::make_shared<Function_Number>();
+            one->PushOperation("1");
+            FinalFunction->PushComposed(one);
+            return FinalFunction;
+        }
         std::shared_ptr<Function_Number> zero = std::make_shared<Function_Number>();
         zero->PushOperation("0");
         FinalFunction->PushComposed(zero);
@@ -209,6 +230,14 @@ std::shared_ptr<Function_Composed> derivative::QuotientRule(std::shared_ptr<Func
     auto Func = std::dynamic_pointer_cast<Function_Composed>(Func_);
     if (!Func)
     {
+        if (std::dynamic_pointer_cast<Function_Variable>(Func_) != nullptr)
+        {
+            // an variable
+            std::shared_ptr<Function_Number> one = std::make_shared<Function_Number>();
+            one->PushOperation("1");
+            FinalFunction->PushComposed(one);
+            return FinalFunction;
+        }
         std::shared_ptr<Function_Number> zero = std::make_shared<Function_Number>();
         zero->PushOperation("0");
         FinalFunction->PushComposed(zero);
