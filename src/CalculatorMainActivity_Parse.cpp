@@ -4,11 +4,13 @@
 #include "../scr/Function_Number.hpp"
 #include <stdexcept>
 #include <iostream>
+#include "../scr/StepLogger.hpp"
 #include <vector>
 #include <map>
 #include <string>
 #include "../scr/Derivative.hpp"
 #include <stdexcept>
+#include "../scr/MathWindow.hpp"
 static std::vector<int> FinishedId;
 std::shared_ptr<Function> CalculatorMainActivity::GetCurrentPosition(std::shared_ptr<Function_Composed> func, int id, bool Create)
 {
@@ -139,9 +141,10 @@ double CalculatorMainActivity::Calculate(int index)
                 number->PushOperation(ToStringWithPrecision(CurrentNumPart));
                 if (CurrentId == 0)
                 {
-                    if (HasPush == true) {
-                                                FullFunction->PushComposed(number);
-                    FullFunction->PushComposed(op);
+                    if (HasPush == true)
+                    {
+                        FullFunction->PushComposed(number);
+                        FullFunction->PushComposed(op);
                     }
                     FullFunction->PushComposed(number_);
                 }
@@ -151,7 +154,7 @@ double CalculatorMainActivity::Calculate(int index)
                     if (HasPush == true)
                     {
                         pos_->PushComposed(number);
-                                            pos_->PushComposed(op);
+                        pos_->PushComposed(op);
                     }
                     pos_->PushComposed(number_);
                 }
@@ -357,12 +360,17 @@ double CalculatorMainActivity::Calculate(int index)
     }
     */
     // return std::stod(NewValues.at(0));
-    std::cout << "original function:" << FullFunction->toString() << std::endl;
-    if(FullFunction->ContainsUnknown())
+    if (FullFunction->ContainsUnknown())
     {
+        StepLogger::Clear();
+        StepLogger::Append("\\begin{array}{l}");
         auto deri = derivative::Derivative(FullFunction);
-        std::cout << "derivated function:" << deri->toString() << std::endl;
-      return 12;  
+        StepLogger::Append("So the derivative of:", FullFunction->toLatexString(),0);
+        StepLogger::Append("Is:", deri->toLatexString(),0);
+        StepLogger::Append("\\end{array}");
+        auto* win = new MathWindow(nullptr);
+        win->Show();
+        return 12;
     }
     return std::stod(FullFunction->Calculate().GetData());
 }

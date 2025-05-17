@@ -17,8 +17,9 @@ void Function_Composed::PushComposed(std::shared_ptr<Function> Composed)
 }
 std::string Function_Composed::toString()
 {
-    std::string originalStr = ""; 
-    if(OutlineFunc != "ComposedOperationSpecialNoInitalized") originalStr += OutlineFunc;
+    std::string originalStr = "";
+    if (OutlineFunc != "ComposedOperationSpecialNoInitalized")
+        originalStr += OutlineFunc;
     for (const auto &a : ComposedList)
     {
         auto ptr = std::dynamic_pointer_cast<Function_Composed>(a);
@@ -40,12 +41,117 @@ std::string Function_Composed::toString()
                     originalStr += display;
                 }
             }
-        }else {
+        }
+        else
+        {
             originalStr += a->GetData();
         }
     }
-    if(OutlineFunc != "ComposedOperationSpecialNoInitalized") originalStr += ")";
+    if (OutlineFunc != "ComposedOperationSpecialNoInitalized")
+        originalStr += ")";
     return originalStr;
+}
+std::string Function_Composed::toLatexString()
+{
+    std::string fullstring = "";
+    int i = 0;
+    if (OutlineFunc != "ComposedOperationSpecialNoInitalized")
+    {
+        if (OutlineFunc != "squared(" && OutlineFunc != "sqrt(")
+            fullstring += OutlineFunc + "{";
+        else if (OutlineFunc == "sqrt(")
+            fullstring += "\\sqrt{";
+        else
+            fullstring += "({";
+    }
+    while (i < ComposedList.size())
+    {
+        auto element = ComposedList.at(i);
+        if (i + 2 < ComposedList.size())
+        {
+            auto elptr = ComposedList.at(i + 1);
+            auto elptr2 = ComposedList.at(i + 2);
+            auto OperationPtr = std::dynamic_pointer_cast<Function_Operation>(elptr);
+            if (OperationPtr)
+            {
+                if (OperationPtr->GetData() == "/")
+                {
+                    fullstring += "\\frac{";
+                    auto COmposedel = std::dynamic_pointer_cast<Function_Composed>(element);
+                    auto COmposedel2 = std::dynamic_pointer_cast<Function_Composed>(elptr2);
+                    if (COmposedel)
+                    {
+                        // A composed
+                        fullstring += COmposedel->toLatexString();
+                    }
+                    else
+                    {
+                        fullstring += element->GetData();
+                    }
+                    fullstring += "}{";
+                    if (COmposedel2)
+                    {
+                        fullstring += COmposedel2->toLatexString();
+                    }
+                    else
+                    {
+                        fullstring += elptr2->GetData();
+                    }
+                    fullstring += "}";
+                    i += 3;
+                    continue;
+                }
+            }
+            // Typical rendering
+            // We will render it
+        }
+        auto ComposedEl = std::dynamic_pointer_cast<Function_Composed>(element);
+        if (ComposedEl)
+        {
+            if (i > 0)
+            {
+                auto FuncOP = std::dynamic_pointer_cast<Function_Operation>(ComposedList.at(i - 1));
+                if (FuncOP)
+                {
+                    if (FuncOP->GetData() == "*")
+                    {
+                        if (ComposedEl->GetData() == "ComposedOperationSpecialNoInitalized")
+                        {
+                            fullstring += "({";
+                            fullstring += ComposedEl->toLatexString();
+                            fullstring += "})";
+                        }
+                        else
+                        {
+                            fullstring += ComposedEl->toLatexString();
+                        }
+                    }else {
+                        fullstring += ComposedEl->toLatexString();
+                    }
+                }
+                else
+                {
+                    fullstring += ComposedEl->toLatexString();
+                }
+            }
+            else
+            {
+                fullstring += ComposedEl->toLatexString();
+            }
+        }
+        else
+        {
+            fullstring += element->GetData();
+        }
+        i++;
+    }
+    if (OutlineFunc != "ComposedOperationSpecialNoInitalized" && OutlineFunc != "sqrt(")
+        fullstring += "})";
+    if (OutlineFunc == "sqrt(")
+        fullstring += "}";
+    if (OutlineFunc == "squared(")
+        fullstring += "^2";
+    return fullstring;
 }
 void Function_Composed::PushComposed(std::vector<std::shared_ptr<Function>> Composed)
 {

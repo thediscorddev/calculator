@@ -20,4 +20,5 @@ class Function_Composed: public Function
         bool ContainsUnknown();
         Function_Number Calculate();
         std::string toString();
+        std::string toLatexString();
 };

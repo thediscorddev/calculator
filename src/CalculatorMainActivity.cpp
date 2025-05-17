@@ -199,8 +199,8 @@ void CalculatorMainActivity::OnToggle(wxCommandEvent &event)
                 double result = Calculate(); // Assuming Calculate returns double
 
                 // Option 1: wxString::Format (recommended)
-                ((CustomTextCtrl *)m_textCtrl)->SetOverlayText(wxString::Format("%.10g", result)); // Format as string
-                ResultDisplay *frame = new ResultDisplay("Result",NULL);
+                //((CustomTextCtrl *)m_textCtrl)->SetOverlayText(wxString::Format("%.10g", result)); // Format as string
+                //ResultDisplay *frame = new ResultDisplay("Result",NULL);
             }
             catch (std::exception &e)
             {
