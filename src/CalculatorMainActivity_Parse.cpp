@@ -365,8 +365,8 @@ double CalculatorMainActivity::Calculate(int index)
         StepLogger::Clear();
         StepLogger::Append("\\begin{array}{l}");
         auto deri = derivative::Derivative(FullFunction);
-        StepLogger::Append("So the derivative of:", FullFunction->toLatexString(),0);
-        StepLogger::Append("Is:", deri->toLatexString(),0);
+        StepLogger::Append("So the derivative of: ", "Vậy nên, đạo hàm của ", FullFunction->toLatexString(),0);
+        StepLogger::Append("Is: ", "là ", deri->toLatexString(),0);
         StepLogger::Append("\\end{array}");
         auto* win = new MathWindow(nullptr);
         win->Show();

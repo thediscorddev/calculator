@@ -1,6 +1,6 @@
 #include "../scr/CustomTextCtrl.hpp"
 #include "../scr/CalculatorMainActivity.hpp"
-CustomTextCtrl::CustomTextCtrl(wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style = 0)
+CustomTextCtrl::CustomTextCtrl(wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, long style)
     : wxTextCtrl(parent, id, "", pos, size, style | wxTE_MULTILINE | wxTE_NO_VSCROLL | wxTE_WORDWRAP | wxTE_READONLY)
 {
 

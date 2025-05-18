@@ -9,5 +9,6 @@ class StepLogger
         static void Clear();
         static void Append(std::string step);
         static void Append(std::string Text, std::string latex, int level = 0);
+        static void Append(std::string Text1, std::string Text2, std::string latex, int level = 0);
         static std::vector<std::string> CopyStep();
 };

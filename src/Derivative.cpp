@@ -13,21 +13,21 @@ std::shared_ptr<Function_Composed> derivative::Derivative(std::shared_ptr<Functi
         if (std::dynamic_pointer_cast<Function_Variable>(Func_) != nullptr)
         {
             // an variable
-            StepLogger::Append("Finding the derivative of ", "x", level);
-            StepLogger::Append("Derivative of x is ", "1", level);
+            StepLogger::Append("Finding the derivative of ", "Tìm đạo hàm của ", "x", level);
+            StepLogger::Append("Derivative of x is ", "Đạo hàm của x là ", "1", level);
             std::shared_ptr<Function_Number> one = std::make_shared<Function_Number>();
             one->PushOperation("1");
             finalFunction->PushComposed(one);
             return finalFunction;
         }
-        StepLogger::Append("Finding the derivative of ", Func->GetData(), level);
-        StepLogger::Append("For a constant, the derivative is 0", "", level);
+        StepLogger::Append("Finding the derivative of ", "Tìm đạo hàm của ", Func_->GetData(), level);
+        StepLogger::Append("For a constant, the derivative is 0", "Đối với 1 hằng số, đạo hàm của nó là 0", "", level);
         std::shared_ptr<Function_Number> zero = std::make_shared<Function_Number>();
         zero->PushOperation("0");
         finalFunction->PushComposed(zero);
         return finalFunction;
     }
-    StepLogger::Append("Finding the derivative of ", Func->toLatexString(), level);
+    StepLogger::Append("Finding the derivative of ", "Tìm đạo hàm của ", Func->toLatexString(), level);
     if (Func->GetComposedData().size() == 0)
     {
         std::shared_ptr<Function_Number> zero = std::make_shared<Function_Number>();
@@ -48,8 +48,8 @@ std::shared_ptr<Function_Composed> derivative::Derivative(std::shared_ptr<Functi
                 }
                 else
                 {
-                    StepLogger::Append("Finding the derivative of x", "", level);
-                    StepLogger::Append("Derivative of x is", " 1", level);
+                    StepLogger::Append("Finding the derivative of x", "Tìm đạo hàm của x", "", level);
+                    StepLogger::Append("Derivative of x is ", "Đạo hàm của x là ", " 1", level);
                     std::shared_ptr<Function_Number> one = std::make_shared<Function_Number>();
                     one->PushOperation("1");
                     finalFunction->PushComposed(one);
@@ -57,8 +57,8 @@ std::shared_ptr<Function_Composed> derivative::Derivative(std::shared_ptr<Functi
             }
             else
             {
-                StepLogger::Append("Finding the derivative of ", "", level);
-                StepLogger::Append("Derivative of x is", "1", level);
+                StepLogger::Append("Finding the derivative of x", "Tìm đạo hàm của x", "", level);
+                StepLogger::Append("Derivative of x is ", "Đạo hàm của x là ", "1", level);
                 std::shared_ptr<Function_Number> zero = std::make_shared<Function_Number>();
                 zero->PushOperation("0");
                 finalFunction->PushComposed(zero);
@@ -70,9 +70,9 @@ std::shared_ptr<Function_Composed> derivative::Derivative(std::shared_ptr<Functi
             // the pointer exist
             // Since we only have 1 arg
             if (Func->GetData() == "ComposedOperationSpecialNoInitalized")
-                finalFunction->PushComposed(ChainRule(Func->GetComposedData().at(0),level+1));
+                finalFunction->PushComposed(ChainRule(Func->GetComposedData().at(0), level + 1));
             else
-                finalFunction->PushComposed(ChainRule(Func,level+1));
+                finalFunction->PushComposed(ChainRule(Func, level + 1));
         }
     }
     else
@@ -138,12 +138,12 @@ std::shared_ptr<Function_Composed> derivative::Derivative(std::shared_ptr<Functi
                     {
                         if (ptr->GetData() == "*")
                         {
-                            finalFunction->PushComposed(ProductRule(Arg,level+1));
+                            finalFunction->PushComposed(ProductRule(Arg, level + 1));
                             // chain rule
                         }
                         else if (ptr->GetData() == "/")
                         {
-                            finalFunction->PushComposed(QuotientRule(Arg,level+1));
+                            finalFunction->PushComposed(QuotientRule(Arg, level + 1));
                             // quotient rule
                         }
                     }
@@ -161,7 +161,7 @@ std::shared_ptr<Function_Composed> derivative::Derivative(std::shared_ptr<Functi
                     continue;
                 Arg->PushComposed(a);
             }
-            finalFunction->PushComposed(ChainRule(Func,level+1));
+            finalFunction->PushComposed(ChainRule(Func, level + 1));
         }
     }
     return finalFunction;
@@ -186,24 +186,24 @@ std::shared_ptr<Function_Composed> derivative::ChainRule(std::shared_ptr<Functio
         FinalFunction->PushComposed(zero);
         return FinalFunction;
     }
-    StepLogger::Append("Applying Chain rules for ", Func->toLatexString(), level);
+    StepLogger::Append("Applying Chain rule for ", "Áp dụng quy tắc chuỗi cho hàm ", Func->toLatexString(), level);
     auto Arg = std::make_shared<Function_Composed>();
     for (auto &a : Func->GetComposedData())
     {
         Arg->PushComposed(a);
     }
-    StepLogger::Append("Chain rules has the following formula: d/dx (f(g(x))) = f'(g(x)) * g(x)", "", level);
-    FinalFunction->PushComposed(Derivative(Arg, level + 1));
-    StepLogger::Append("With g(x) is:",Arg->toLatexString(), level);
+    StepLogger::Append("Chain rule is: d/dx (f(g(x))) = f'(g(x)) * g(x)", "Quy tắc chuỗi có công thức sau: d/dx (f(g(x))) = f'(g(x)) * g(x)", "", level);
+    StepLogger::Append("With g(x) = ", "với g(x) = ", Arg->toLatexString(), level);
     if (Func->GetData() != "ComposedOperationSpecialNoInitalized")
     {
         std::shared_ptr<Function_Operation> multiple = std::make_shared<Function_Operation>();
+        StepLogger::Append("With f(x) = " + Func->GetData() + "x)", "với f(x) = " + Func->GetData() + "x)", "", level);
+        FinalFunction->PushComposed(derivativeTable[Func->GetData()](Func));
         multiple->PushOperation("*");
         FinalFunction->PushComposed(multiple);
-        StepLogger::Append("With f(x) is: "+Func->GetData()+"x)","", level);
-        FinalFunction->PushComposed(derivativeTable[Func->GetData()](Func));
     }
-    StepLogger::Append("After applying chain rules, the final derivative is: ", FinalFunction->toLatexString(), level);
+    FinalFunction->PushComposed(Derivative(Arg, level + 1));
+    StepLogger::Append("After applying chain rule, the derivative is: ", "Sau khi áp dụng quy tắc chuỗi, đạo hàm của nó là: ", FinalFunction->toLatexString(), level);
     return FinalFunction;
 }
 std::shared_ptr<Function_Composed> derivative::ProductRule(std::shared_ptr<Function> Func_, int level)
@@ -226,23 +226,24 @@ std::shared_ptr<Function_Composed> derivative::ProductRule(std::shared_ptr<Funct
         FinalFunction->PushComposed(zero);
         return FinalFunction;
     }
-    StepLogger::Append("Applying Product rules for", Func->toLatexString(), level);
+    StepLogger::Append("Applying Product rule for ", "Áp dụng quy tắc tích cho hàm ", Func->toLatexString(), level);
     auto fx = Func->GetComposedData().at(0);
     auto gx = std::make_shared<Function_Composed>();
     for (int i = 2; i < Func->GetComposedData().size(); i++)
     {
         gx->PushComposed(Func->GetComposedData().at(i));
     }
-    StepLogger::Append("Product rules is: d/dx(f(x)*g(x)) = f'(x)g(x) + f(x)g'(x)", "", level);
+    StepLogger::Append("Product rule is: d/dx(f(x)*g(x)) = f'(x)g(x) + f(x)g'(x)", "Quy tắc tích có công thưc sau: d/dx(f(x)*g(x)) = f'(x)g(x) + f(x)g'(x)", "", level);
     auto ptr = std::dynamic_pointer_cast<Function_Composed>(fx);
-    if(ptr)
+    if (ptr)
     {
-        StepLogger::Append("With f(x) =", ptr->toLatexString(), level);
-    }else
-    {
-        StepLogger::Append("With f(x) =", fx->GetData(), level);
+        StepLogger::Append("With f(x) = ", "Với f(x) = ", ptr->toLatexString(), level);
     }
-    StepLogger::Append("With g(x) =", gx->toLatexString(), level);
+    else
+    {
+        StepLogger::Append("With f(x) =", "Với f(x) = ", fx->GetData(), level);
+    }
+    StepLogger::Append("With g(x) =", "Với g(x) = ", gx->toLatexString(), level);
     FinalFunction->PushComposed(Derivative(fx, level + 1));
     std::shared_ptr<Function_Operation> multiple = std::make_shared<Function_Operation>();
     multiple->PushOperation("*");
@@ -256,7 +257,7 @@ std::shared_ptr<Function_Composed> derivative::ProductRule(std::shared_ptr<Funct
     multiple1->PushOperation("*");
     FinalFunction->PushComposed(multiple1);
     FinalFunction->PushComposed(fx);
-    StepLogger::Append("After product rule: ", FinalFunction->toLatexString(), level);
+    StepLogger::Append("After product rule, the derivative is: ", "Sau quy tắc tích, đạo hàm của nó là: ", FinalFunction->toLatexString(), level);
     return FinalFunction;
 }
 std::shared_ptr<Function_Composed> derivative::QuotientRule(std::shared_ptr<Function> Func_, int level)
@@ -283,8 +284,8 @@ std::shared_ptr<Function_Composed> derivative::QuotientRule(std::shared_ptr<Func
     0    1  2   3  4   5  6 7  8+
 
     */
-   StepLogger::Append("Applying Quotient rules for", Func->toLatexString(), level);
-    StepLogger::Append("Quotient rules is: d/dx(f(x)/g(x)) = (f'(x)g(x) - f(x)g'(x))/(g(x)^2)", "", level);
+    StepLogger::Append("Applying Quotient rule for ", "Áp dụng quy tắc thương cho hàm ", Func->toLatexString(), level);
+    StepLogger::Append("Quotient rule is: d/dx(f(x)/g(x)) = (f'(x)g(x) - f(x)g'(x))/(g(x)^2)", "Quy tắc thương có công thưc sau: d/dx(f(x)/g(x)) = (f'(x)g(x) - f(x)g'(x))/(g(x)^2)", "", level);
     auto gx = Func->GetComposedData().at(2);
     auto fx = std::make_shared<Function_Composed>();
     fx->PushComposed(Func->GetComposedData().at(0));
@@ -293,12 +294,14 @@ std::shared_ptr<Function_Composed> derivative::QuotientRule(std::shared_ptr<Func
         fx->PushComposed(Func->GetComposedData().at(i));
     }
     auto ptr = std::dynamic_pointer_cast<Function_Composed>(gx);
-    StepLogger::Append("With f(x) =", fx->toLatexString(), level);
+    StepLogger::Append("With f(x) = ", "Với f(x) = ", fx->toLatexString(), level);
     if (ptr)
     {
-        StepLogger::Append("With g(x) =", ptr->toLatexString(), level);
-    }else {
-        StepLogger::Append("With g(x) =", gx->GetData(), level);
+        StepLogger::Append("With g(x) = ", "Với g(x) = ", ptr->toLatexString(), level);
+    }
+    else
+    {
+        StepLogger::Append("With g(x) = ", "Với g(x) = ", gx->GetData(), level);
     }
     std::shared_ptr<Function_Composed> FinalFunctionUp = std::make_shared<Function_Composed>();
     // term1 = f'(x) * g(x)
@@ -329,7 +332,7 @@ std::shared_ptr<Function_Composed> derivative::QuotientRule(std::shared_ptr<Func
     FinalFunction->PushComposed(FinalFunctionUp);
     FinalFunction->PushComposed(division);
     FinalFunction->PushComposed(PowDe);
-    StepLogger::Append("After quotient rule: ", FinalFunction->toLatexString(), level);
+    StepLogger::Append("After quotient rule: ", "Sau quy tắc thương, đạo hàm của nó là: ", FinalFunction->toLatexString(), level);
     return FinalFunction;
 }
 void derivative::prepareDerivativeTable()

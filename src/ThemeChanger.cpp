@@ -9,16 +9,17 @@
 #include <memory>
 #include <vector>
 wxBEGIN_EVENT_TABLE(ThemeChanger, wxFrame)
-    EVT_BUTTON(wxID_ANY, ThemeChanger::OnToggle)  // Add event handlers here
-wxEND_EVENT_TABLE()
-ThemeChanger::ThemeChanger(const wxString &title, CalculatorMainActivity *ptr)
-    : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(300, 190)), activityptr(ptr)
+    EVT_BUTTON(wxID_ANY, ThemeChanger::OnToggle) // Add event handlers here
+    wxEND_EVENT_TABLE()
+        ThemeChanger::ThemeChanger(const wxString &title, CalculatorMainActivity *ptr)
+    : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(300, 210)), activityptr(ptr)
 {
     ButtonList.push_back(std::make_shared<BlackButton>(this, 1000, "Theme 1", wxPoint(0, 0), wxSize(300, 30)));
     ButtonList.push_back(std::make_shared<GreenButton>(this, 1001, "Theme 2", wxPoint(0, 30), wxSize(300, 30)));
     ButtonList.push_back(std::make_shared<SpecialButton>(this, 1002, "Theme 3", wxPoint(0, 60), wxSize(300, 30)));
     ButtonList.push_back(std::make_shared<OperationButton>(this, 1003, "Theme 4", wxPoint(0, 90), wxSize(300, 30)));
     ButtonList.push_back(std::make_shared<Button>(this, 1004, "Theme 5", wxPoint(0, 120), wxSize(300, 30)));
+    ButtonList.push_back(std::make_shared<Button>(this, 1005, "Toggle lang (Eng/Vn (beta))", wxPoint(0, 150), wxSize(300, 30)));
 }
 void ThemeChanger::OnToggle(wxCommandEvent &event)
 {
@@ -47,6 +48,10 @@ void ThemeChanger::OnToggle(wxCommandEvent &event)
     {
         activityptr->SwitchButtonTheme(4);
         id = 4;
+    }
+    else if (event.GetId() == 1005)
+    {
+        CalculatorMainActivity::lang = (CalculatorMainActivity::lang == 1)?2:1;
     }
     for (auto &a : ButtonList)
     {

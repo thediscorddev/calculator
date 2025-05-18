@@ -1,1 +1,1 @@
-g++ -g main.cpp src/*.cpp `wx-config --cxxflags --libs` -o compile/myapp -Id:/
+g++ -g main.cpp src/*.cpp -I/mingw64/custom-wxwidgets-3.2.8/lib/wx/include/msw-unicode-3.2 -I/mingw64/custom-wxwidgets-3.2.8/include/wx-3.2 -I/c/webview2-sdk/include -Id:/ -L/mingw64/custom-wxwidgets-3.2.8/lib -L/c/webview2-sdk/lib -lwx_mswu_webview-3.2 -lwx_mswu_core-3.2 -lwx_baseu-3.2 -lWebView2LoaderStatic -o compile/myapp

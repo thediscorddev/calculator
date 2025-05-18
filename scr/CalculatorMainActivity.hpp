@@ -16,6 +16,7 @@ struct FunctionReturn
 };
 class CalculatorMainActivity : public wxFrame {
 public:
+    static int lang; //for push step, 1 is eng, 2 is vn
     CalculatorMainActivity(const wxString& title);
     static std::vector<std::string> CurrentInput;
     static     int CursorPosition; //default

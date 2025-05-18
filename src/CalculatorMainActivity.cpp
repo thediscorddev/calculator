@@ -14,9 +14,10 @@
 #include "../scr/ThemeChanger.hpp"
 #include "../scr/ResultDisplay.hpp"
 #include "../scr/Derivative.hpp"
-unsigned int CalculatorMainActivity::theme = 0;  // Initialize here
+unsigned int CalculatorMainActivity::theme = 0; // Initialize here
 std::map<int, std::string> CalculatorMainActivity::ButtonClickInput;
 std::vector<std::string> CalculatorMainActivity::CurrentInput;
+int CalculatorMainActivity::lang = 1;
 int CalculatorMainActivity::CursorPosition = 1; // default =
 
 // Then in your constructor:
@@ -24,6 +25,12 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString &title)
     : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(880, 600)),
       m_timer(this)
 {
+#if wxUSE_WEBVIEW_EDGE
+    std::cout << "Edge backend enabled at compile time\n";
+#else
+    std::cout << "Edge backend disabled at compile time\n";
+#endif
+    SetEnvironmentVariableW(L"WEBVIEW2_BROWSER_EXECUTABLE_FOLDER", L".\\WebView2Runtime");
     wxImage::AddHandler(new wxPNGHandler());
     m_textCtrl = new CustomTextCtrl(this, wxID_ANY, wxPoint(0, 0), wxSize(800, 200));
     m_textCtrl->SetSize(m_textCtrl->GetSize().GetWidth(), m_textCtrl->GetSize().GetHeight());
@@ -199,27 +206,29 @@ void CalculatorMainActivity::OnToggle(wxCommandEvent &event)
                 double result = Calculate(); // Assuming Calculate returns double
 
                 // Option 1: wxString::Format (recommended)
-                //((CustomTextCtrl *)m_textCtrl)->SetOverlayText(wxString::Format("%.10g", result)); // Format as string
-                //ResultDisplay *frame = new ResultDisplay("Result",NULL);
+                ((CustomTextCtrl *)m_textCtrl)->SetOverlayText(wxString::Format("%.10g", result)); // Format as string
+                // ResultDisplay *frame = new ResultDisplay("Result",NULL);
             }
             catch (std::exception &e)
             {
                 // result->SetLabel(e.what());
-                ResultDisplay *frame = new ResultDisplay("Error",e.what());
+                ResultDisplay *frame = new ResultDisplay("Error", e.what());
             }
         }
         else if (id_ == 1027)
         {
-            ThemeChanger *frame = new ThemeChanger("Change button theme",this);
+            ThemeChanger *frame = new ThemeChanger("Change button theme", this);
             frame->Show(true);
-        }else if(id_ == 1028)
+        }
+        else if (id_ == 1028)
         {
-            Shift = (Shift==true)?false:true;
+            Shift = (Shift == true) ? false : true;
             Alpha = false;
             ShiftKeyboard();
-        }else if(id_ == 1029)
+        }
+        else if (id_ == 1029)
         {
-            Alpha = (Alpha == true)?false:true;
+            Alpha = (Alpha == true) ? false : true;
             Shift = false;
             AlphaKeyboard();
         }

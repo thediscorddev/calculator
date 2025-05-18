@@ -141,7 +141,18 @@ std::string Function_Composed::toLatexString()
         }
         else
         {
-            fullstring += element->GetData();
+            auto ptr_ = std::dynamic_pointer_cast<Function_Operation>(element);
+            if(ptr_)
+            {
+                if(ptr_->GetData() == "*")
+                {
+                    fullstring += "\\cdot ";
+                }else {
+                    fullstring += element->GetData();
+                }
+            }else {
+                fullstring += element->GetData();
+            }
         }
         i++;
     }
