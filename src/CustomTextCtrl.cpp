@@ -34,7 +34,7 @@ void CustomTextCtrl::Refreshs()
 
 void CustomTextCtrl::OnPaint(wxPaintEvent &event)
 {
-
+    return;
     wxPaintDC dc(this);
     SetScrollPos(wxHORIZONTAL, 0);
     SetScrollbar(wxHORIZONTAL, 0, 0, 0);
@@ -65,7 +65,7 @@ void CustomTextCtrl::OnPaint(wxPaintEvent &event)
     dc.GetTextExtent(m_secondOverlay.SubString(0, std::min(28, CursorXLen)), &width, &height);
     dc.DrawText("_", width - 10, 35);
     // should consider that this code has a fragment that could cause free after use.. Let's just call it segmentation fault for now.. Tbh even after I had OS dev, I am still as dumb as I was a kid.
-}
+    }
 
 void CustomTextCtrl::DisplayCursor(bool cursorStatus, int cursorPos, std::vector<std::string> &CurrentTextInput)
 {

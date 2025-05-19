@@ -3,9 +3,11 @@
 #include <wx/timer.h>
 #include <memory>
 #include <vector>
+#include <wx/webview.h>  // For wxWebView
 #include <string>
 #include <map>
 #include "Function.hpp"
+#include "ButtonImageManager.hpp"
 #include "Function_Composed.hpp"
 #include "Function_Variable.hpp"
 #include <functional>
@@ -22,8 +24,10 @@ public:
     static     int CursorPosition; //default
     void SwitchButtonTheme(unsigned int id);
 private:
+    bool IsRendererReady = false;
     bool Shift = false;
     bool Alpha = false;
+    void OnPageReady(wxWebViewEvent& event);
     void OnTimer(wxTimerEvent& event);
     void UpdateTime();
     void OnToggle(wxCommandEvent& event); // Handler for button toggle
@@ -46,15 +50,16 @@ private:
     static std::map<std::string, std::function<double(double)>> FunctionBatchOne;
     bool DisplayCursor = false;
     static std::map<int, std::string> ButtonClickInput;
-    std::vector<std::shared_ptr<wxButton>> FirstPageButton, FirstPageButton_ShiftAffect, FirstPageButton_Shift;
+    ButtonImageManager FirstPageButton, FirstPageButton_ShiftAffect, FirstPageButton_Shift;
     std::vector<wxRect> FirstPageButtonRect, FirstPageButtonShiftRect;
     std::vector<std::shared_ptr<wxButton>> SecondPageButton;
     FunctionReturn GetCurrentPosition_(std::shared_ptr<Function_Composed> func, int id, bool Create = true);
     std::shared_ptr<Function> GetCurrentPosition(std::shared_ptr<Function_Composed> func, int id, bool Create = true);
-    wxTextCtrl* m_textCtrl;
-    wxStaticText* result;
-    wxButton* m_toggleButton; // Button for toggling
+    wxTextCtrl* m_textCtrl=nullptr;
+    wxStaticText* result=nullptr;
+    wxButton* m_toggleButton=nullptr; // Button for toggling
     wxTimer m_timer;
+    wxWebView* webView=nullptr;
 
     wxDECLARE_EVENT_TABLE();
 };

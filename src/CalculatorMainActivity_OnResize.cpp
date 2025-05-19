@@ -23,29 +23,29 @@ void CalculatorMainActivity::OnResize(wxSizeEvent &event)
                                            static_cast<int>(mY * elRect.height)));
 
         // Resize bitmap
-        wxImage img = FirstPageButton[i]->GetBitmap().ConvertToImage();                                               // Convert wxBitmap to wxImage
-        img.Rescale(static_cast<int>(mX * elRect.width*0.8), static_cast<int>(mY * elRect.height*0.8), wxIMAGE_QUALITY_HIGH); // Resize bitmap
-        wxBitmap resizedBitmap(img);                                                                                  // Convert back to wxBitmap
-        FirstPageButton[i]->SetBitmap(resizedBitmap);
+        FirstPageButton[i]->Rescale(static_cast<int>(mX * elRect.width * 0.8), static_cast<int>(mY * elRect.height * 0.8));
     }
     for (int i = 0; i < FirstPageButton_Shift.size(); i++)
     {
         wxRect &elRect = FirstPageButtonShiftRect.at(i);
 
         FirstPageButton_Shift[i]->SetSize(wxRect(static_cast<int>(mX * elRect.x),
-                                           static_cast<int>(mY * elRect.y),
-                                           static_cast<int>(mX * elRect.width),
-                                           static_cast<int>(mY * elRect.height)));
+                                                 static_cast<int>(mY * elRect.y),
+                                                 static_cast<int>(mX * elRect.width),
+                                                 static_cast<int>(mY * elRect.height)));
 
-        // Resize bitmap
-        wxImage img = FirstPageButton_Shift[i]->GetBitmap().ConvertToImage();                                               // Convert wxBitmap to wxImage
-        img.Rescale(static_cast<int>(mX * elRect.width*0.8), static_cast<int>(mY * elRect.height*0.8), wxIMAGE_QUALITY_HIGH); // Resize bitmap
-        wxBitmap resizedBitmap(img);                                                                                  // Convert back to wxBitmap
-        FirstPageButton_Shift[i]->SetBitmap(resizedBitmap);
+        FirstPageButton_Shift[i]->Rescale(static_cast<int>(mX * elRect.width * 0.8), static_cast<int>(mY * elRect.height * 0.8));
     }
-    if(m_textCtrl != nullptr)
+    if (m_textCtrl != nullptr)
     {
         m_textCtrl->SetSize(static_cast<int>(mX * 800), static_cast<int>(mY * 200));
+    }
+    if (webView != nullptr)
+    {
+        webView->SetSize(wxSize(static_cast<int>(mX * 800), static_cast<int>(mY * 200)));
+        wxString script = "document.body.style.transformOrigin = \"0 0\";";
+        script+="document.body.style.transform = \"scale("+std::to_string(static_cast<float>(mX))+","+ std::to_string(static_cast<float>(mY))+")\";";
+        if(IsRendererReady) webView->RunScript(script);
     }
     event.Skip(); // Propagate the event
 }

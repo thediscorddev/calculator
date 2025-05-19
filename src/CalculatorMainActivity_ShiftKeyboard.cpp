@@ -13,22 +13,22 @@ void CalculatorMainActivity::ShiftKeyboard()
 {
     if(Shift == true)
     {
-        for(auto & a: FirstPageButton_ShiftAffect)
+        for(auto & a: FirstPageButton_ShiftAffect.GetContainer())
         {
-            a->Hide();
+            a.Hide();
         }
-        for(auto & a: FirstPageButton_Shift)
+        for(auto & a: FirstPageButton_Shift.GetContainer())
         {
-            a->Show();
+            a.Show();
         }
     }else {
-        for(auto & a: FirstPageButton_ShiftAffect)
+        for(auto & a: FirstPageButton_ShiftAffect.GetContainer())
         {
-            a->Show();
+            a.Show();
         }
-        for(auto & a: FirstPageButton_Shift)
+        for(auto & a: FirstPageButton_Shift.GetContainer())
         {
-            a->Hide();
+            a.Hide();
         }
     }
     this->Layout();
@@ -37,22 +37,22 @@ void CalculatorMainActivity::AlphaKeyboard()
 {
     if(Shift == true)
     {
-        for(auto & a: FirstPageButton_ShiftAffect)
+        for(auto & a: FirstPageButton_ShiftAffect.GetContainer())
         {
-            a->Hide();
+            a.Hide();
         }
-        for(auto & a: FirstPageButton_Shift)
+        for(auto & a: FirstPageButton_Shift.GetContainer())
         {
-            a->Show();
+            a.Show();
         }
     }else {
-        for(auto & a: FirstPageButton_ShiftAffect)
+        for(auto & a: FirstPageButton_ShiftAffect.GetContainer())
         {
-            a->Show();
+            a.Show();
         }
-        for(auto & a: FirstPageButton_Shift)
+        for(auto & a: FirstPageButton_Shift.GetContainer())
         {
-            a->Hide();
+            a.Hide();
         }
     }
 }

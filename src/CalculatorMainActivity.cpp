@@ -13,6 +13,7 @@
 #include "../scr/SpecialButton.hpp"
 #include "../scr/ThemeChanger.hpp"
 #include "../scr/ResultDisplay.hpp"
+#include "../scr/FileManager.hpp"
 #include "../scr/Derivative.hpp"
 unsigned int CalculatorMainActivity::theme = 0; // Initialize here
 std::map<int, std::string> CalculatorMainActivity::ButtonClickInput;
@@ -25,6 +26,7 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString &title)
     : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(880, 600)),
       m_timer(this)
 {
+    FileManager::PrepareFile();
 #if wxUSE_WEBVIEW_EDGE
     std::cout << "Edge backend enabled at compile time\n";
 #else
@@ -32,6 +34,41 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString &title)
 #endif
     SetEnvironmentVariableW(L"WEBVIEW2_BROWSER_EXECUTABLE_FOLDER", L".\\WebView2Runtime");
     wxImage::AddHandler(new wxPNGHandler());
+    webView = wxWebView::New(this, wxID_ANY, "",
+                             wxPoint(0, 0), wxSize(800, 200), wxWebViewBackendEdge, 0);
+    wxString html;
+    html += "<!DOCTYPE html>\n<html>\n<head>\n";
+    html += "<meta charset='utf-8'>\n";
+    html += "<title>Thein calculator: Derivative result</title>\n";
+    html += "<script>\n";
+    html += "window.MathJax = {\n";
+    html += "  tex: {\n";
+    html += "    packages: ['base','color'],\n";
+    html += "    inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],\n";
+    html += "    displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']]\n";
+    html += "  },\n";
+    html += "  chtml: { scale: 1 }\n";
+    html += "};\n";
+    html += "</script>\n";
+    html += "<script type=\"text/javascript\">";
+    html += "if (window.MathJax) {";
+    html += "MathJax.Hub.Queue([\"Typeset\", MathJax.Hub]);";
+    html += "}";
+    html += "</script>";
+    html += "<script>";
+    html += FileManager::MathJax;
+    html += "</script>";
+    // html += "<script src=\"" + mathjaxPath + "\"></script>\n"; // e.g., js/mathjax/es5/tex-chtml.js
+    // html += "<script src=\"https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS_HTML\"></script>\n";
+    html += "</head>\n<body>\n";
+    //html += "<h1>Result</h1>\n";
+    html += "<p id = 'LatexExp'>$$";
+    html += "\textcolor{blue}{\\textbf{This is an example coloring}}"; // This should be your long LaTeX expression
+    html += "$$</p>";
+
+    html += "</body>\n</html>\n";
+    // webView->SetPage("<html><body><h1>Edge backend test</h1><p>Hello, world</p></body></html>", "");
+    webView->SetPage(html, "");
     m_textCtrl = new CustomTextCtrl(this, wxID_ANY, wxPoint(0, 0), wxSize(800, 200));
     m_textCtrl->SetSize(m_textCtrl->GetSize().GetWidth(), m_textCtrl->GetSize().GetHeight());
     m_textCtrl->SetScrollPos(wxHORIZONTAL, 0);
@@ -41,7 +78,6 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString &title)
     SetClientSize(wxSize(800, 510));
 
     PrepareFunction();
-
     // Create the text box at (0,0) with size 800x200
     // result = new TransparentStaticText(this, wxID_ANY, wxT(""), wxPoint(500, 210), wxSize(200, 100)); //
     ((CustomTextCtrl *)m_textCtrl)->SetOverlayText("");
@@ -61,8 +97,9 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString &title)
     HandleClick();
     derivative::prepareDerivativeTable();
     m_timer.Start(500); // Start timer
-
+    m_textCtrl->Hide();
     m_textCtrl->Enable(false);
+    this->Layout();
 }
 
 void CalculatorMainActivity::UpdateContent()
@@ -104,7 +141,7 @@ void CalculatorMainActivity::UpdateTime()
 }
 void CalculatorMainActivity::SwitchButtonTheme(unsigned int id)
 {
-    for (auto &a : FirstPageButton)
+    for (auto &a : FirstPageButton.GetContainer())
     {
         if (dynamic_cast<BlackButton *>(a.get()))
         {
@@ -127,7 +164,7 @@ void CalculatorMainActivity::SwitchButtonTheme(unsigned int id)
             dynamic_cast<Button *>(a.get())->ChangeTheme(id);
         }
     }
-    for (auto &a : FirstPageButton_Shift)
+    for (auto &a : FirstPageButton_Shift.GetContainer())
     {
         if (dynamic_cast<BlackButton *>(a.get()))
         {
@@ -233,4 +270,8 @@ void CalculatorMainActivity::OnToggle(wxCommandEvent &event)
             AlphaKeyboard();
         }
     }
+}
+void CalculatorMainActivity::OnPageReady(wxWebViewEvent& event)
+{
+    IsRendererReady = true;
 }

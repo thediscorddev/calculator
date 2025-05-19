@@ -1,5 +1,6 @@
 #include "../scr/MathWindow.hpp"
 #include "../scr/StepLogger.hpp"
+#include "../scr/FileManager.hpp"
 #include <wx/webview.h>  // For wxWebView
 #include <wx/stdpaths.h> // For wxStandardPaths
 #include <wx/filename.h> // For wxFileName
@@ -20,12 +21,6 @@ MathWindow::MathWindow(wxWindow *parent)
     wxFileName exeFile(exePath);
     wxString baseDir = exeFile.GetPath(); // e.g., /home/user/myapp or C:\Users\...
     wxString mathjaxPath = "file:///" + baseDir;
-    mathjaxPath.Replace("\\", "/");
-    mathjaxPath += "/js/mathjax/es5/tex-mml-chtml.js";
-    std::cout << "MathJax path: " << mathjaxPath << std::endl;
-    std::ifstream mathjax("js/mathjax/es5/tex-mml-chtml.js");
-    std::string jsContent((std::istreambuf_iterator<char>(mathjax)),
-                          std::istreambuf_iterator<char>());
     wxString latexExpr = wxString::FromUTF8(Step);
     wxString html;
     html += "<!DOCTYPE html>\n<html>\n<head>\n";
@@ -47,7 +42,7 @@ MathWindow::MathWindow(wxWindow *parent)
     html += "}";
     html += "</script>";
     html += "<script>";
-    html += jsContent;
+    html += FileManager::MathJax;
     html += "</script>";
     // html += "<script src=\"" + mathjaxPath + "\"></script>\n"; // e.g., js/mathjax/es5/tex-chtml.js
     // html += "<script src=\"https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS_HTML\"></script>\n";
@@ -59,6 +54,5 @@ MathWindow::MathWindow(wxWindow *parent)
 
     html += "</body>\n</html>\n";
     // webView->SetPage("<html><body><h1>Edge backend test</h1><p>Hello, world</p></body></html>", "");
-    std::cout << (wxWebView::IsBackendAvailable(wxWebViewBackendEdge)) << std::endl;
     webView->SetPage(html, "file:///" + baseDir + "/");
 }
