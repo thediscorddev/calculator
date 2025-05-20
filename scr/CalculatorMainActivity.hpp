@@ -41,6 +41,7 @@ private:
     static unsigned int theme; //default theme
     void ShiftKeyboard();
     void AlphaKeyboard();
+    std::shared_ptr<Function_Composed> Parse(int index, bool warning = true);
     Function_Composed CalculateDerivative(Function_Composed &function);
     Function_Composed CalculateDerivativeAndCreateNewOutLine(std::string OutlineType, std::shared_ptr<Function> Arg);
     std::string GetDisplayString(std::string CurrentString, int pos);

@@ -88,8 +88,24 @@ FunctionReturn CalculatorMainActivity::GetCurrentPosition_(std::shared_ptr<Funct
     Data.func = newComposed;
     return Data;
 }
-
 double CalculatorMainActivity::Calculate(int index)
+{
+    std::shared_ptr<Function_Composed> FullFunction = Parse(index);
+    if (FullFunction->ContainsUnknown())
+    {
+        StepLogger::Clear();
+        StepLogger::Append("\\begin{array}{l}");
+        auto deri = derivative::Derivative(FullFunction);
+        StepLogger::Append("So the derivative of: ", "Vậy nên, đạo hàm của ", FullFunction->toLatexString(), 0);
+        StepLogger::Append("Is: ", "là ", deri->toLatexString(), 0);
+        StepLogger::Append("\\end{array}");
+        auto *win = new MathWindow(nullptr);
+        win->Show();
+        return 12;
+    }
+    return std::stod(FullFunction->Calculate().GetData());
+}
+std::shared_ptr<Function_Composed> CalculatorMainActivity::Parse(int index, bool warning)
 {
     FinishedId.clear();
     // Parser
@@ -104,7 +120,6 @@ double CalculatorMainActivity::Calculate(int index)
     std::map<std::string, std::string> Ftype;                  // important
     std::vector<std::string> PlannedOperation;
     std::shared_ptr<Function_Composed> FullFunction = std::make_shared<Function_Composed>();
-
     for (int i = index - 1; i < CurrentInput.size(); i++)
     {
         const auto &a = CurrentInput.at(i);
@@ -255,7 +270,7 @@ double CalculatorMainActivity::Calculate(int index)
             }
         }
     }
-    if (CurrentId != 0)
+    if (CurrentId != 0 && warning)
     {
         // error
         throw std::runtime_error("Syntax Error");
@@ -263,7 +278,12 @@ double CalculatorMainActivity::Calculate(int index)
     std::shared_ptr<Function> number = std::make_shared<Function_Number>();
     number->PushOperation(ToStringWithPrecision(CurrentNumPart));
     if (HasPush == true)
+    {
+        std::shared_ptr<Function> mul = std::make_shared<Function_Operation>();
+        mul->PushOperation("*");
+        FullFunction->PushComposed(mul);
         FullFunction->PushComposed(number);
+    }
     CurrentNumPart = 0;
     HasPush = false;
     decimalNum = 0;
@@ -360,19 +380,7 @@ double CalculatorMainActivity::Calculate(int index)
     }
     */
     // return std::stod(NewValues.at(0));
-    if (FullFunction->ContainsUnknown())
-    {
-        StepLogger::Clear();
-        StepLogger::Append("\\begin{array}{l}");
-        auto deri = derivative::Derivative(FullFunction);
-        StepLogger::Append("So the derivative of: ", "Vậy nên, đạo hàm của ", FullFunction->toLatexString(),0);
-        StepLogger::Append("Is: ", "là ", deri->toLatexString(),0);
-        StepLogger::Append("\\end{array}");
-        auto* win = new MathWindow(nullptr);
-        win->Show();
-        return 12;
-    }
-    return std::stod(FullFunction->Calculate().GetData());
+    return FullFunction;
 }
 /*
 

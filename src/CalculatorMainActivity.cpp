@@ -12,9 +12,22 @@
 #include "../scr/OperationButton.hpp"
 #include "../scr/SpecialButton.hpp"
 #include "../scr/ThemeChanger.hpp"
+#include <regex>
 #include "../scr/ResultDisplay.hpp"
 #include "../scr/FileManager.hpp"
 #include "../scr/Derivative.hpp"
+std::string escapeBackslashes(const std::string& input) {
+    std::string result;
+    result.reserve(input.size() * 2);  // reserve space to avoid reallocations
+    for (char c : input) {
+        if (c == '\\')
+            result += "\\\\";
+        else
+            result += c;
+    }
+    return result;
+}
+static std::vector<int> FinishedId;
 unsigned int CalculatorMainActivity::theme = 0; // Initialize here
 std::map<int, std::string> CalculatorMainActivity::ButtonClickInput;
 std::vector<std::string> CalculatorMainActivity::CurrentInput;
@@ -32,6 +45,7 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString &title)
 #else
     std::cout << "Edge backend disabled at compile time\n";
 #endif
+    this->Show(false); // show the frame now
     SetEnvironmentVariableW(L"WEBVIEW2_BROWSER_EXECUTABLE_FOLDER", L".\\WebView2Runtime");
     wxImage::AddHandler(new wxPNGHandler());
     webView = wxWebView::New(this, wxID_ANY, "",
@@ -47,7 +61,7 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString &title)
     html += "    inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],\n";
     html += "    displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']]\n";
     html += "  },\n";
-    html += "  chtml: { scale: 1 }\n";
+    html += "  chtml: { scale: 2 }\n";
     html += "};\n";
     html += "</script>\n";
     html += "<script type=\"text/javascript\">";
@@ -61,9 +75,9 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString &title)
     // html += "<script src=\"" + mathjaxPath + "\"></script>\n"; // e.g., js/mathjax/es5/tex-chtml.js
     // html += "<script src=\"https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS_HTML\"></script>\n";
     html += "</head>\n<body>\n";
-    //html += "<h1>Result</h1>\n";
+    // html += "<h1>Result</h1>\n";
     html += "<p id = 'LatexExp'>$$";
-    html += "\textcolor{blue}{\\textbf{This is an example coloring}}"; // This should be your long LaTeX expression
+    html += "\\textcolor{blue}{\\textbf{Click anything}}"; // This should be your long LaTeX expression
     html += "$$</p>";
 
     html += "</body>\n</html>\n";
@@ -104,24 +118,18 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString &title)
 
 void CalculatorMainActivity::UpdateContent()
 {
-    if (DisplayCursor == true)
-        UpdateContentWithCursor();
-    else
+    auto FullFunction = Parse(1, false);
+    // Get latex
+    if (IsRendererReady)
     {
-        int Pos = 0;
-        int i = 0;
-        std::string CurrentDisplayedText = "";
-        for (const auto &a : CurrentInput)
+        wxString script = "document.getElementById('LatexExp').textContent = '$$" + escapeBackslashes(FullFunction->toLatexString()) + "$$'; MathJax.typesetPromise();";
+        webView->RunScript(script);
+        std::cout << FullFunction->toLatexString() << std::endl;
+        for(auto a : CurrentInput)
         {
-            if (i <= CursorPosition)
-            {
-                Pos += a.length();
-                i++;
-            }
-            CurrentDisplayedText += a;
+            std::cout << a;
         }
-        ((CustomTextCtrl *)m_textCtrl)->SetSecondOverlayText(GetDisplayString(CurrentDisplayedText, Pos));
-        ((CustomTextCtrl *)m_textCtrl)->SetOverlayText("");
+        std::cout << std::endl;
     }
 }
 void CalculatorMainActivity::UpdateContentWithCursor()
@@ -208,6 +216,10 @@ void CalculatorMainActivity::OnToggle(wxCommandEvent &event)
     if (SpecialFunction == false && ButtonClickInput.find(event.GetId()) != ButtonClickInput.end())
     {
         CurrentInput.insert(CurrentInput.begin() + (CursorPosition - 1), ButtonClickInput[event.GetId()]);
+        if(ButtonClickInput[event.GetId()][ButtonClickInput[event.GetId()].size() -1] == '(')
+        {
+            CurrentInput.insert(CurrentInput.begin() + (CursorPosition), ")");
+        }
         CursorPosition++;
         UpdateContent();
     }
@@ -271,7 +283,8 @@ void CalculatorMainActivity::OnToggle(wxCommandEvent &event)
         }
     }
 }
-void CalculatorMainActivity::OnPageReady(wxWebViewEvent& event)
+void CalculatorMainActivity::OnPageReady(wxWebViewEvent &event)
 {
     IsRendererReady = true;
+    this->Show(true); // show the frame now
 }

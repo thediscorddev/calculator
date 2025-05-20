@@ -26,7 +26,7 @@ void StepLogger::Append(std::string Text, std::string latex, int level)
         finalString += "- "+ std::to_string(counter) + ": "+ Text + "}";
         counter++;
     }else finalString +=  "- "+ Text + "}";
-    finalString += latex;
+    finalString += "\\textcolor{blue}{" + latex + "}";
     finalString += "\\\\";
     Step.push_back(finalString);
 }

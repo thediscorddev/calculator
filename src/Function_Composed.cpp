@@ -125,7 +125,9 @@ std::string Function_Composed::toLatexString()
                         {
                             fullstring += ComposedEl->toLatexString();
                         }
-                    }else {
+                    }
+                    else
+                    {
                         fullstring += ComposedEl->toLatexString();
                     }
                 }
@@ -142,15 +144,19 @@ std::string Function_Composed::toLatexString()
         else
         {
             auto ptr_ = std::dynamic_pointer_cast<Function_Operation>(element);
-            if(ptr_)
+            if (ptr_)
             {
-                if(ptr_->GetData() == "*")
+                if (ptr_->GetData() == "*")
                 {
-                    fullstring += "\\cdot ";
-                }else {
+                    fullstring += " \\cdot ";
+                }
+                else
+                {
                     fullstring += element->GetData();
                 }
-            }else {
+            }
+            else
+            {
                 fullstring += element->GetData();
             }
         }
@@ -370,4 +376,8 @@ Function_Number Function_Composed::Calculate()
         finalNumber.PushOperation(std::to_string(num));
     }
     return finalNumber;
+}
+void Function_Composed::highlight(int level)
+{
+    Highlight = level;
 }
