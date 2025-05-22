@@ -164,6 +164,9 @@ std::string Function_Composed::toLatexString()
     }
     if (OutlineFunc != "ComposedOperationSpecialNoInitalized" && OutlineFunc != "sqrt(")
         fullstring += "})";
+    if (DestroyLastBracket)
+        if (!fullstring.empty())
+            fullstring.pop_back();
     if (OutlineFunc == "sqrt(")
         fullstring += "}";
     if (OutlineFunc == "squared(")
@@ -201,7 +204,7 @@ bool Function_Composed::ContainsUnknown()
     }
     return false;
 }
-Function_Number Function_Composed::Calculate()
+Function_Number Function_Composed::Calculate(double number)
 {
     Function_Number finalNumber;
     std::vector<std::string> OperationList;
@@ -211,8 +214,14 @@ Function_Number Function_Composed::Calculate()
         auto ptr = std::dynamic_pointer_cast<Function_Composed>(ComposedList.at(i));
         if (ptr)
         {
-            Function_Number Result = ptr->Calculate();
+            Function_Number Result = ptr->Calculate(number);
             OperationList.push_back(Result.GetData());
+        }
+        auto ptr3 = std::dynamic_pointer_cast<Function_Variable>(ComposedList.at(i));
+        if (ptr3)
+        {
+            // A var
+            OperationList.push_back(std::to_string(number));
         }
         auto ptr1 = std::dynamic_pointer_cast<Function_Number>(ComposedList.at(i));
         if (ptr1)
@@ -241,7 +250,6 @@ Function_Number Function_Composed::Calculate()
             catch (const std::exception &e)
             {
                 // An unknown.. or a variable
-                OperationList.push_back("0");
             }
         }
         auto ptr2 = std::dynamic_pointer_cast<Function_Operation>(ComposedList.at(i));
@@ -380,4 +388,8 @@ Function_Number Function_Composed::Calculate()
 void Function_Composed::highlight(int level)
 {
     Highlight = level;
+}
+void Function_Composed::BreakBracket(bool Status)
+{
+    DestroyLastBracket = Status;
 }

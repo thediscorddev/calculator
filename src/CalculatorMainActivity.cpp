@@ -230,8 +230,9 @@ void CalculatorMainActivity::OnToggle(wxCommandEvent &event)
         {
             if (CurrentInput.size() != 0)
             {
-                CurrentInput.pop_back();
+               if(CursorPosition -1 >= 0) CurrentInput.erase(CurrentInput.begin() + CursorPosition - 1);
                 CursorPosition--;
+                if(CursorPosition -1 < 0) CursorPosition = 1;
                 UpdateContent();
             }
         }

@@ -10,6 +10,7 @@
 #include <string>
 #include "../scr/Derivative.hpp"
 #include <stdexcept>
+#include "../scr/TaylorSeries.hpp"
 #include "../scr/MathWindow.hpp"
 static std::vector<int> FinishedId;
 std::shared_ptr<Function> CalculatorMainActivity::GetCurrentPosition(std::shared_ptr<Function_Composed> func, int id, bool Create)
@@ -101,6 +102,7 @@ double CalculatorMainActivity::Calculate(int index)
         StepLogger::Append("\\end{array}");
         auto *win = new MathWindow(nullptr);
         win->Show();
+        std::cout << "Original func: " << FullFunction->toLatexString() << std::endl << "First 4 terms of their taylor series centered at x = 6: " << TaylorSeries::GenerateTaylorSeries(FullFunction,6,4)->toLatexString() << std::endl;
         return 12;
     }
     return std::stod(FullFunction->Calculate().GetData());
@@ -240,12 +242,14 @@ std::shared_ptr<Function_Composed> CalculatorMainActivity::Parse(int index, bool
                 Hid++;
                 CurrentId = Hid;
                 auto pos_ = std::dynamic_pointer_cast<Function_Composed>(GetCurrentPosition(FullFunction, CurrentId));
+                pos_->BreakBracket(true);
                 if (a != "(")
                     pos_->PushOperation(a);
             }
             else if (a == ")")
             {
                 auto pos_ = std::dynamic_pointer_cast<Function_Composed>(GetCurrentPosition(FullFunction, CurrentId));
+                pos_->BreakBracket(false);
                 std::shared_ptr<Function> number = std::make_shared<Function_Number>();
                 number->PushOperation(ToStringWithPrecision(CurrentNumPart));
                 if (HasPush == true)
