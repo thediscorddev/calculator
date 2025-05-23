@@ -48,7 +48,7 @@ std::shared_ptr<Function_Composed> derivative::Derivative(std::shared_ptr<Functi
                 }
                 else
                 {
-                    //StepLogger::Append("Finding the derivative of x", "Tìm đạo hàm của x", "", level);
+                    // StepLogger::Append("Finding the derivative of x", "Tìm đạo hàm của x", "", level);
                     StepLogger::Append("Derivative of x is ", "Đạo hàm của x là ", " 1", level, display);
                     std::shared_ptr<Function_Number> one = std::make_shared<Function_Number>();
                     one->PushOperation("1");
@@ -57,7 +57,7 @@ std::shared_ptr<Function_Composed> derivative::Derivative(std::shared_ptr<Functi
             }
             else
             {
-                //StepLogger::Append("Finding the derivative of a constant", "Tìm đạo hàm của hằng số", "", level);
+                // StepLogger::Append("Finding the derivative of a constant", "Tìm đạo hàm của hằng số", "", level);
                 StepLogger::Append("Derivative of a constant is ", "Đạo hàm của 1 hằng số là ", "0", level, display);
                 std::shared_ptr<Function_Number> zero = std::make_shared<Function_Number>();
                 zero->PushOperation("0");
@@ -359,6 +359,18 @@ void derivative::prepareDerivativeTable()
         finalFunc->PushComposed(tempFunc);
         return finalFunc;
     };
+    derivativeTable["squared("] = [](std::shared_ptr<Function_Composed> func)
+    {
+        std::shared_ptr<Function_Composed> finalFunc = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Operation> Multiple = std::make_shared<Function_Operation>();
+        std::shared_ptr<Function_Number> number = std::make_shared<Function_Number>();
+        Multiple->PushOperation("*");
+        number->PushOperation("2");
+        finalFunc->PushComposed(number);
+        finalFunc->PushComposed(Multiple);
+        finalFunc->PushComposed(func->GetComposedData());
+        return finalFunc;
+    };
     derivativeTable["tan("] = [](std::shared_ptr<Function_Composed> func)
     {
         std::shared_ptr<Function_Composed> finalFunc = std::make_shared<Function_Composed>();
@@ -384,6 +396,143 @@ void derivative::prepareDerivativeTable()
         tempFunc1->PushComposed(tempFunc2);
         finalFunc->PushComposed(number);
         finalFunc->PushComposed(Multiple);
+        finalFunc->PushComposed(tempFunc1);
+        return finalFunc;
+    };
+    derivativeTable["erf("] = [](std::shared_ptr<Function_Composed> func)
+    {
+        std::shared_ptr<Function_Composed> finalFunc = std::make_shared<Function_Composed>();
+        // e^(-x^2)
+        std::shared_ptr<Function_Composed> tempFunc1 = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Composed> tempFunc2 = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Operation> Multiple = std::make_shared<Function_Operation>();
+        std::shared_ptr<Function_Number> number = std::make_shared<Function_Number>();
+        tempFunc1->PushOperation("exp(");
+        tempFunc2->PushOperation("squared(");
+        tempFunc2->PushComposed(func->GetComposedData());
+        Multiple->PushOperation("*");
+        number->PushOperation("-1");
+        tempFunc1->PushComposed(number);
+        tempFunc1->PushComposed(Multiple);
+        tempFunc1->PushComposed(tempFunc2);
+        // 2/sqrt(pi)
+        std::shared_ptr<Function_Number> number2 = std::make_shared<Function_Number>();
+        number2->PushOperation("1.128379167");
+        std::shared_ptr<Function_Operation> Multiple2 = std::make_shared<Function_Operation>();
+        Multiple2->PushOperation("*");
+        // Put it all
+        finalFunc->PushComposed(number2);
+        finalFunc->PushComposed(Multiple2);
+        finalFunc->PushComposed(tempFunc1);
+        return finalFunc;
+    };
+    derivativeTable["erfc("] = [](std::shared_ptr<Function_Composed> func)
+    {
+        std::shared_ptr<Function_Composed> finalFunc = std::make_shared<Function_Composed>();
+        // e^(-x^2)
+        std::shared_ptr<Function_Composed> tempFunc1 = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Composed> tempFunc2 = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Operation> Multiple = std::make_shared<Function_Operation>();
+        std::shared_ptr<Function_Number> number = std::make_shared<Function_Number>();
+        tempFunc1->PushOperation("exp(");
+        tempFunc2->PushOperation("squared(");
+        tempFunc2->PushComposed(func->GetComposedData());
+        Multiple->PushOperation("*");
+        number->PushOperation("-1");
+        tempFunc1->PushComposed(number);
+        tempFunc1->PushComposed(Multiple);
+        tempFunc1->PushComposed(tempFunc2);
+        // 2/sqrt(pi)
+        std::shared_ptr<Function_Number> number2 = std::make_shared<Function_Number>();
+        number2->PushOperation("1.128379167");
+        std::shared_ptr<Function_Operation> Multiple2 = std::make_shared<Function_Operation>();
+        Multiple2->PushOperation("*");
+        // Put it all
+        finalFunc->PushComposed(number2);
+        finalFunc->PushComposed(Multiple2);
+        finalFunc->PushComposed(tempFunc1);
+        return finalFunc;
+    };
+    derivativeTable["erfi("] = [](std::shared_ptr<Function_Composed> func)
+    {
+        std::shared_ptr<Function_Composed> finalFunc = std::make_shared<Function_Composed>();
+        // e^(-x^2)
+        std::shared_ptr<Function_Composed> tempFunc1 = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Composed> tempFunc2 = std::make_shared<Function_Composed>();
+        tempFunc1->PushOperation("exp(");
+        tempFunc2->PushOperation("squared(");
+        tempFunc2->PushComposed(func->GetComposedData());
+        tempFunc1->PushComposed(tempFunc2);
+        // 2/sqrt(pi)
+        std::shared_ptr<Function_Number> number2 = std::make_shared<Function_Number>();
+        number2->PushOperation("1.128379167");
+        std::shared_ptr<Function_Operation> Multiple2 = std::make_shared<Function_Operation>();
+        Multiple2->PushOperation("*");
+        // Put it all
+        finalFunc->PushComposed(number2);
+        finalFunc->PushComposed(Multiple2);
+        finalFunc->PushComposed(tempFunc1);
+        return finalFunc;
+    };
+    derivativeTable["productlog("] = [](std::shared_ptr<Function_Composed> func)
+    {
+        std::shared_ptr<Function_Composed> finalFunc = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Composed> tempFunc1 = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Composed> tempFunc2 = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Composed> tempFunc3 = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Number> number = std::make_shared<Function_Number>();
+        number->PushOperation("1");
+        std::shared_ptr<Function_Operation> multiply = std::make_shared<Function_Operation>();
+        multiply->PushOperation("*");
+        std::shared_ptr<Function_Operation> addition = std::make_shared<Function_Operation>();
+        addition->PushOperation("+");
+        tempFunc2->PushOperation("productlog(");
+        tempFunc2->PushComposed(func->GetComposedData());
+        tempFunc3->PushComposed(number);
+        tempFunc3->PushComposed(addition);
+        tempFunc3->PushComposed(tempFunc2);
+        tempFunc1->PushComposed(func->GetComposedData());
+        tempFunc1->PushComposed(multiply);
+        tempFunc1->PushComposed(tempFunc3);
+        // 2/sqrt(pi)
+        std::shared_ptr<Function_Number> number2 = std::make_shared<Function_Number>();
+        number2->PushOperation("1");
+        std::shared_ptr<Function_Operation> division = std::make_shared<Function_Operation>();
+        division->PushOperation("/");
+        // Put it all
+        finalFunc->PushComposed(number2);
+        finalFunc->PushComposed(division);
+        finalFunc->PushComposed(tempFunc1);
+        return finalFunc;
+    };
+    derivativeTable["plogalter("] = [](std::shared_ptr<Function_Composed> func)
+    {
+        std::shared_ptr<Function_Composed> finalFunc = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Composed> tempFunc1 = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Composed> tempFunc2 = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Composed> tempFunc3 = std::make_shared<Function_Composed>();
+        std::shared_ptr<Function_Number> number = std::make_shared<Function_Number>();
+        number->PushOperation("1");
+        std::shared_ptr<Function_Operation> multiply = std::make_shared<Function_Operation>();
+        multiply->PushOperation("*");
+        std::shared_ptr<Function_Operation> addition = std::make_shared<Function_Operation>();
+        addition->PushOperation("+");
+        tempFunc2->PushOperation("plogalter(");
+        tempFunc2->PushComposed(func->GetComposedData());
+        tempFunc3->PushComposed(number);
+        tempFunc3->PushComposed(addition);
+        tempFunc3->PushComposed(tempFunc2);
+        tempFunc1->PushComposed(func->GetComposedData());
+        tempFunc1->PushComposed(multiply);
+        tempFunc1->PushComposed(tempFunc3);
+        // 2/sqrt(pi)
+        std::shared_ptr<Function_Number> number2 = std::make_shared<Function_Number>();
+        number2->PushOperation("1");
+        std::shared_ptr<Function_Operation> division = std::make_shared<Function_Operation>();
+        division->PushOperation("/");
+        // Put it all
+        finalFunc->PushComposed(number2);
+        finalFunc->PushComposed(division);
         finalFunc->PushComposed(tempFunc1);
         return finalFunc;
     };

@@ -57,10 +57,18 @@ std::string Function_Composed::toLatexString()
     int i = 0;
     if (OutlineFunc != "ComposedOperationSpecialNoInitalized")
     {
-        if (OutlineFunc != "squared(" && OutlineFunc != "sqrt(")
+        if (OutlineFunc != "squared(" &&OutlineFunc != "sqrt(" &&OutlineFunc != "plogalter(" && OutlineFunc != "productlog(")
             fullstring += OutlineFunc + "{";
         else if (OutlineFunc == "sqrt(")
             fullstring += "\\sqrt{";
+        else if (OutlineFunc == "productlog(")
+        {
+            fullstring += "W({";
+        }
+        else if (OutlineFunc == "plogalter(")
+        {
+            fullstring += "W_{-1}({";
+        }
         else
             fullstring += "({";
     }
