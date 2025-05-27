@@ -47,13 +47,12 @@ CalculatorMainActivity::CalculatorMainActivity(const wxString &title)
 #endif
     this->Show(false); // show the frame now
     SetEnvironmentVariableW(L"WEBVIEW2_BROWSER_EXECUTABLE_FOLDER", L".\\WebView2Runtime");
-    wxImage::AddHandler(new wxPNGHandler());
     webView = wxWebView::New(this, wxID_ANY, "",
                              wxPoint(0, 0), wxSize(800, 200), wxWebViewBackendEdge, 0);
     wxString html;
     html += "<!DOCTYPE html>\n<html>\n<head>\n";
     html += "<meta charset='utf-8'>\n";
-    html += "<title>Thein calculator: Derivative result</title>\n";
+    html += "<title>Thein calculator: Input screen</title>\n";
     html += "<script>\n";
     html += "window.MathJax = {\n";
     html += "  tex: {\n";

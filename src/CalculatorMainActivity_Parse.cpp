@@ -12,6 +12,7 @@
 #include <stdexcept>
 #include "../scr/TaylorSeries.hpp"
 #include "../scr/MathWindow.hpp"
+#include "../scr/UnknownFunctionScreenHelper.hpp"
 static std::vector<int> FinishedId;
 std::shared_ptr<Function> CalculatorMainActivity::GetCurrentPosition(std::shared_ptr<Function_Composed> func, int id, bool Create)
 {
@@ -102,6 +103,8 @@ double CalculatorMainActivity::Calculate(int index)
         StepLogger::Append("\\end{array}");
         auto *win = new MathWindow(nullptr);
         win->Show();
+        auto *UnknownHelper = new UnknownFunctionScreenHelper(nullptr,FullFunction);
+        UnknownHelper->Show();
         std::cout << "Original func: " << FullFunction->toLatexString() << std::endl << "First 4 terms of their taylor series centered at x = 6: " << TaylorSeries::GenerateTaylorSeries(FullFunction,6,4)->toLatexString() << std::endl;
         return 12;
     }
