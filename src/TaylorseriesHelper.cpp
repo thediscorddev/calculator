@@ -36,7 +36,7 @@ TaylorseriesHelper::TaylorseriesHelper(wxWindow *parent, std::shared_ptr<Functio
     sizer->Add(termBox, 0, wxALIGN_CENTER | wxALL, 5);    // Below the web view
     sizer->Add(centerBox, 0, wxALIGN_CENTER | wxALL, 5);  // Below the web view
     sizer->Add(findTaylor, 0, wxALIGN_CENTER | wxALL, 5); // Below the web view
-    func=function;
+    func = function;
     panel->SetSizer(sizer);
 
     // Prepare your HTML content
@@ -58,9 +58,9 @@ TaylorseriesHelper::TaylorseriesHelper(wxWindow *parent, std::shared_ptr<Functio
     html += FileManager::MathJax;
     html += "</script>\n";
     html += "</head>\n<body>\n";
-    html += "<p id='LatexExp'>$$";
-    html += "\\textbf{Input: } \\\\" + function->toLatexString();
-    html += "$$</p>\n</body>\n</html>";
+    html += "<p id='LatexExp'>$$\\begin{aligned}";
+    html += "\\textbf{Input:} \\\\ " + function->toLatexString();
+    html += "\\end{aligned}$$</p>\n</body>\n</html>";
 
     webView->SetPage(html, "");
 }
@@ -75,9 +75,11 @@ void TaylorseriesHelper::onButtonEvent(wxCommandEvent &event)
             int NumTerms = std::stoi(termBox->GetValue().ToStdString());
             if (NumTerms > 0)
             {
-                auto *box = new TaylorSeriesCalculating(this,func,NumTerms,CenterX);
+                auto *box = new TaylorSeriesCalculating(this, func, NumTerms, CenterX);
                 box->Show();
-            }else wxMessageBox("The entered value is invalid.", "Input Error", wxOK | wxICON_ERROR);
+            }
+            else
+                wxMessageBox("The entered value is invalid.", "Input Error", wxOK | wxICON_ERROR);
         }
         catch (...)
         {

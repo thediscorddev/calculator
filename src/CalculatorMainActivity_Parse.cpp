@@ -105,7 +105,6 @@ double CalculatorMainActivity::Calculate(int index)
         win->Show();
         auto *UnknownHelper = new UnknownFunctionScreenHelper(nullptr,FullFunction);
         UnknownHelper->Show();
-        std::cout << "Original func: " << FullFunction->toLatexString() << std::endl << "First 4 terms of their taylor series centered at x = 6: " << TaylorSeries::GenerateTaylorSeries(FullFunction,6,4)->toLatexString() << std::endl;
         return 12;
     }
     return std::stod(FullFunction->Calculate().GetData());

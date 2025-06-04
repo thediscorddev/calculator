@@ -54,9 +54,9 @@ TaylorSeriesCalculating::TaylorSeriesCalculating(wxWindow *parent, std::shared_p
     html += FileManager::MathJax;
     html += "</script>\n";
     html += "</head>\n<body>\n";
-    html += "<p id='LatexExp'>$$";
+    html += "<p id='LatexExp'>$$\\begin{aligned}{l}";
     html += "\\textbf{Result: } \\\\" + TaylorSeriesFunc->toLatexString();
-    html += "$$</p>\n</body>\n</html>";
+    html += "\\end{aligned}$$</p>\n</body>\n</html>";
 
     webView->SetPage(html, "");
 }
@@ -67,7 +67,7 @@ void TaylorSeriesCalculating::onButtonEvent(wxCommandEvent &event)
     {
         if (wxTheClipboard->Open())
         {
-            wxTheClipboard->SetData(new wxTextDataObject(TaylorSeriesFunc->toLatexString()));
+            wxTheClipboard->SetData(new wxTextDataObject(OriginalFunc->toLatexString()));
             wxTheClipboard->Close();
             wxMessageBox("Successfully copied expression to clipboard.", "Information", wxOK | wxICON_INFORMATION);
         }else wxMessageBox("Failed to copy expression to clipboard.", "Error", wxOK | wxICON_ERROR);
@@ -76,7 +76,7 @@ void TaylorSeriesCalculating::onButtonEvent(wxCommandEvent &event)
     {
         if (wxTheClipboard->Open())
         {
-            wxTheClipboard->SetData(new wxTextDataObject(OriginalFunc->toLatexString()));
+            wxTheClipboard->SetData(new wxTextDataObject(TaylorSeriesFunc->toLatexString()));
             wxTheClipboard->Close();
             wxMessageBox("Successfully copied expression to clipboard.", "Information", wxOK | wxICON_INFORMATION);
         }else wxMessageBox("Failed to copy expression to clipboard.", "Error", wxOK | wxICON_ERROR);

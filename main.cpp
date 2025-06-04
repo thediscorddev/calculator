@@ -5,12 +5,12 @@
 #include "scr/CustomTextCtrl.hpp"
 #include "scr/ThemeChanger.hpp"
 wxBEGIN_EVENT_TABLE(CalculatorMainActivity, wxFrame)
-EVT_TIMER(wxID_ANY, CalculatorMainActivity::OnTimer)
-EVT_BUTTON(wxID_ANY, CalculatorMainActivity::OnToggle) // Bind button event
-EVT_SIZE(CalculatorMainActivity::OnResize)
-EVT_WEBVIEW_LOADED(wxID_ANY, CalculatorMainActivity::OnPageReady)
-wxEND_EVENT_TABLE()
-wxBEGIN_EVENT_TABLE(CustomTextCtrl, wxTextCtrl)
-    EVT_PAINT(CustomTextCtrl::OnPaint)
-wxEND_EVENT_TABLE()
-wxIMPLEMENT_APP(CalculatorClass);
+    EVT_TIMER(wxID_ANY, CalculatorMainActivity::OnTimer)
+        EVT_BUTTON(wxID_ANY, CalculatorMainActivity::OnToggle) // Bind button event
+    EVT_SIZE(CalculatorMainActivity::OnResize)
+        EVT_WEBVIEW_LOADED(wxID_ANY, CalculatorMainActivity::OnPageReady)
+            wxEND_EVENT_TABLE()
+                wxBEGIN_EVENT_TABLE(CustomTextCtrl, wxTextCtrl)
+                    EVT_PAINT(CustomTextCtrl::OnPaint)
+                        wxEND_EVENT_TABLE()
+                            wxIMPLEMENT_APP(CalculatorClass);

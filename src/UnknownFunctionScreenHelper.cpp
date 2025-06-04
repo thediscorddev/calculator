@@ -7,6 +7,7 @@
 #include "../scr/OperationButton.hpp"
 #include <memory>
 #include <wx/webview.h> // For wxWebView
+#include "../scr/Graphing.hpp"
 UnknownFunctionScreenHelper::UnknownFunctionScreenHelper(wxWindow *parent, std::shared_ptr<Function_Composed> function)
     : wxFrame(parent, wxID_ANY, "Thein calculator: Function menu", wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE & ~(wxRESIZE_BORDER | wxMAXIMIZE_BOX))
 {
@@ -55,9 +56,9 @@ UnknownFunctionScreenHelper::UnknownFunctionScreenHelper(wxWindow *parent, std::
     html += FileManager::MathJax;
     html += "</script>\n";
     html += "</head>\n<body>\n";
-    html += "<p id='LatexExp'>$$";
+    html += "<p id='LatexExp'>$$\\begin{aligned}{l}";
     html += "\\textbf{The following function contains variables: } \\\\" + function->toLatexString() + "\\\\ \\textbf{What would you like to do?}";
-    html += "$$</p>\n</body>\n</html>";
+    html += "\\end{aligned}$$</p>\n</body>\n</html>";
 
     webView->SetPage(html, "");
 }
@@ -76,7 +77,8 @@ void UnknownFunctionScreenHelper::onButtonEvent(wxCommandEvent &event)
 
     }else if(id == 10004)
     {
-
+        Graphing * graph = new Graphing(func);
+        graph->Show();
     }else if(id == 10005)
     {
 
