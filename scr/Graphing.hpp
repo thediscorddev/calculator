@@ -6,6 +6,10 @@
 #include <vector>
 #include "Xaxis.hpp"
 #include "Yaxis.hpp"
+enum PenColor
+{
+
+};
 struct Layer
 {
     std::shared_ptr<Function_Composed> function = nullptr;

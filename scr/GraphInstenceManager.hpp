@@ -7,5 +7,5 @@ class GraphicInstenceManager
     private:
     static std::vector<std::shared_ptr<Graphing>> OpenList;
     public:
-     
+        static std::vector<std::shared_ptr<Graphing>> * GetAllActiveInstence();
 };
